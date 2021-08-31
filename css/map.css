@@ -1,0 +1,33 @@
+.container{
+    max-width: 75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.25;
+    font-size: 100%;
+    box-sizing: border-box;
+    color: #333;
+    font-family: Montserrat,Arial,sans-serif;
+}
+.banner_content{
+    max-width: 66%;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+.large{
+    font-size: 3rem;
+}
+.mid{
+    font-size: 1.25rem;
+}
+.map-key{
+    padding: 1rem;
+    background-color: #f4f4f7;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 6px 12px -6px rgba(0,0,0,.15);
+}
+.key_item{
+    margin: 0 .5rem;
+}
