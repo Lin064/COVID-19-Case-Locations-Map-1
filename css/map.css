@@ -31,3 +31,24 @@
 .key_item{
     margin: 0 .5rem;
 }
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.map-container {
+    width: 739px;
+    height: 596px;
+    display: inline-block;
+    border-right: 1px solid #000;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+.info-container {
+    width: 425px;
+    height: 596px;
+    display: inline-block;
+    border-left: 1px solid #000;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
