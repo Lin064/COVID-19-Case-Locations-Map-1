@@ -1,0 +1,111 @@
+ #navigation {
+    margin:0 auto 10px auto;
+    padding:10px 30px;
+    max-width: 70%;
+}
+
+#navigation > li {
+    display:inline;
+    margin:0
+}
+
+#navigation > li > a, #navigation > li > span {
+    display:inline-block;
+    padding:5px 10px;
+    text-decoration:none;
+}
+
+#head {
+    -moz-border-radius:10px;
+    border:0;
+    margin:10px auto 0 auto;
+    padding:5px 30px;
+    max-width: 70%;
+}
+
+.active, #head, #navigation, a {
+    color:#fff;
+}
+#navigation,.active,#head {
+    background:#434A48;
+    color:#fff
+}
+#navigation a:hover {
+    background:#383E3C
+}
+#navigation .active {
+    background:#687370
+}
+
+body {
+    background:#F7F4E9;
+}
+
+
+ .Content-Main{
+            max-width: 70%;
+            margin: auto;
+            border: none;
+            padding:10px 30px;
+            color: #555;
+ }
+        .Content-Main h1{
+            padding: 8px 0px 40px 10px;
+            display: block;
+            border-bottom: 1px solid #444;
+        }
+        .text1{
+            margin-left: 10px;
+            font-size: 16px;
+        }
+        .Content-Main label{
+            margin: 0px 0px 5px;
+            display: block;
+        }
+        
+     
+        .Content-Main label>span{
+            width: 20%;
+            float: left;
+            text-align: right;
+            padding-right: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+      
+        .Content-Main input[type="text"],select,.Content-Main input[type="email"],.Content-Main textarea{
+            height: 25px;
+            width: 70%;
+            line-height: 15px;
+            padding: 5px 0px 5px 5px; 
+            margin-bottom: 16px;
+            margin-right: 6px;
+            margin-top: 2px;
+            border: none;
+            border-radius:2px;
+            -webkit-border-radius:2px;
+            -moz-border-radius:2px;
+            outline: 0 none; 
+            background:  #DFDFDF;
+            color: #525252;
+        }
+        .Content-Main textarea{
+            height: 100px;
+            width: 70%;
+            padding: 5px 0px 0px 5px;
+        }
+        .Content-Main .button{
+            padding: 8px 24px 8px 24px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 4px;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            font-weight: bold;
+            color: #fff;
+            background: #555;
+        }
+        .Content-Main .button:hover{
+            color:  #333;
+            background-color:  #EBEBEB ;
+        }
