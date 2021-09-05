@@ -21,7 +21,7 @@ body{
     align-items: center;
     justify-content: flex-end;
     /* background-color: rgb(201, 204, 213); */
-    background-image: url(/Users/yang/Desktop/ASD/COVIDMapDemo/image/bg.jpeg);
+    background-image: url(bg.jpeg);
     padding: 30px;
 }
 
