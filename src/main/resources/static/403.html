@@ -275,15 +275,12 @@
     const grantAccess = () => {
         // restore the cursor
         key.parentElement.parentElement.style.cursor = "default";
-
         // change the text of the heading and paragraph elements
         heading.textContent = '🎉 yay 🎉';
         paragraph.textContent = 'access granted';
-
         // remove the svg elements for the key and keywhole from the flow of the document
         keyhole.style.display = "none";
         key.style.display = "none";
-
         // remove the event listeners, most notably the one on the window
         window.removeEventListener("mousemove", updateKeyPosition);
         keyhole.removeEventListener("mouseover", grantAccess);

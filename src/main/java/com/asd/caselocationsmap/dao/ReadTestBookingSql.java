@@ -1,6 +1,4 @@
 package com.asd.caselocationsmap.dao;
-
-import com.asd.caselocationsmap.entity.Cases;
 import com.asd.caselocationsmap.entity.TestBooking;
 
 import java.sql.*;

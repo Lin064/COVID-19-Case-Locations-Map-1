@@ -122,8 +122,12 @@
             contentType: "application/json",
             data: JSON.stringify(obj),
             success: function (result1) {
-                console.log(result1);
-                window.location.href = "accountManagement.html"
+                if (!result1){
+                    alert("account has already exists");
+                } else{
+                    window.location.href = "accountManagement.html";
+                }
+
             }
         });
     }

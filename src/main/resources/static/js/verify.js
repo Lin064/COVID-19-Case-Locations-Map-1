@@ -4,21 +4,14 @@ const phone = document.getElementById('phone');
 const password = document.getElementById('password');
 const form = document.getElementById('form');
 
-form.addEventListener('submit', (e) => {
-
-    //prevent page from submitting
-    e.preventDefault();
-
-    checkInputs();
-
-})
-
 function checkInputs() {
     //get values from inputs
     const emailValue = email.value.trim();
     const name1Value = name1.value.trim();
     const phoneValue = phone.value.trim();
     const passwordValue = password.value.trim();
+    var err = document.getElementById("err");
+    err.innerText = "The account is already exist";
     let i = 0;
 
     if(emailValue === '') {
@@ -58,7 +51,31 @@ function checkInputs() {
     }
 
     if(i===4) {
-        window.location.href = "index-page-1.html";
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '/createCustomer',
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email.value,
+                "name": name1.value,
+                "phone": phone.value,
+                "password": password.value
+            }),
+            success: function (result) {
+                if (!result){
+                    var err = document.getElementById("err");
+                    err.innerText = "The account is already exist";
+                }else {
+                    alert("Account has been created");
+                    var err = document.getElementById("err");
+                    err.innerText = "";
+                    window.location.href = "index-page-1.html";
+                    console.log(result);
+                }
+            }
+        }); // end of ajax;
+
     } else {
         console.log(i);
     }
