@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta charset="UTF-8">
+        <title>Create new case</title>
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
+        <script src="js/axios.js"></script>
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+        <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+        <link href="css/style.bundle.css" rel="stylesheet" type="text/css" />
+        <style>
+            .el-form{
+                padding-top: 48px;
+            }
+            .fw-bold {
+                font-weight: 600!important;
+            }
+        </style>
+	</head>
+
+	<body id="kt_body" style="background-image: url('images/header-bg.jpg')" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
+        <div id="app">
+            <div class="d-flex flex-column flex-root">
+                <div class="page d-flex flex-row flex-column-fluid">
+                    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                        <!--Top-->
+                        <div id="kt_header" class="header align-items-stretch" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+                            <div class="container-xxl d-flex align-items-center">
+                                <div class="header-logo me-5 me-md-10 flex-grow-1 flex-lg-grow-0">
+                                    <a href="map.html">
+                                        <img alt="Logo" src="images/maps-ico.png" class="logo-default h-25px" />
+                                    </a>
+                                </div>
+
+                                <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
+                                    <div class="d-flex align-items-stretch" id="kt_header_nav">
+                                        <div class="header-menu align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
+                                            <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
+                                                <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item here menu-lg-down-accordion me-lg-1">
+                                                    <span class="menu-link py-3">
+                                                        <span class="menu-title">Create Cases</span>
+                                                    </span>
+                                                </div>
+                                                <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+                                                    <a class="menu-link py-3" href="cases-management.html">
+                                                        <span class="menu-link py-3">
+                                                            <span class="menu-title">Manage Cases</span>
+                                                         </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--TopMid-->
+                        <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
+                            <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
+                                <div class="page-title d-flex flex-column me-3">
+                                    <h1 class="d-flex text-white fw-bolder my-1 fs-3">Create cases</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Mid-->
+                        <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
+                            <div class="content flex-row-fluid" id="kt_content">
+                                <div class="card">
+                                    <div class="card-body pt-0">
+                                        <!--form-->
+                                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                                                    <el-form-item label="FirstName" prop="firstName">
+                                                        <el-input v-model="ruleForm.firstName"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="LastName" prop="lastName">
+                                                        <el-input v-model="ruleForm.lastName"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="CaseDate" prop="caseDate">
+                                                        <el-date-picker
+                                                                v-model="ruleForm.caseDate"
+                                                                type="date"
+                                                                placeholder="Pick a day">
+                                                        </el-date-picker>
+                                                    </el-form-item>
+                                                    <el-form-item label="LastUpdate" prop="lastUpdated">
+                                                        <el-date-picker
+                                                                v-model="ruleForm.lastUpdated"
+                                                                type="date"
+                                                                placeholder="Pick a day">
+                                                        </el-date-picker>
+                                                    </el-form-item>
+                                                    <el-form-item label="Postcode" prop="postcode">
+                                                        <el-input v-model="ruleForm.postcode"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="Suburb" prop="suburb">
+                                                        <el-input v-model="ruleForm.suburb"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="Lat" prop="lat">
+                                                        <el-input v-model="ruleForm.lat"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="Lng" prop="lng">
+                                                        <el-input v-model="ruleForm.lng"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item label="Location" prop="location">
+                                                        <el-input v-model="ruleForm.location"></el-input>
+                                                    </el-form-item>
+                                                    <el-form-item>
+                                                        <el-button @click="resetForm('ruleForm')">Cancel</el-button>
+                                                        <el-button type="primary" @click="submitForm('ruleForm')">Submit</el-button>
+                                                    </el-form-item>
+                                                </el-form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--bottom-->
+                        <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
+                            <div class="container-xxl d-flex flex-column flex-md-row align-items-center justify-content-between">
+                                <div class="text-dark order-2 order-md-1">
+                                    <span class="text-muted fw-bold me-1">2021</span>
+                                    <a href="map.html" target="_blank" class="text-gray-800 text-hover-primary">COVID-19 Map</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+    <script>
+        ELEMENT.locale(ELEMENT.lang.en)
+        var app = new Vue({
+            el: '#app',
+            data: {
+                ruleForm: {
+                    id: '',
+                    firstName: '',
+                    lastName: '',
+                    caseDate: '',
+                    lastUpdated: '',
+                    postcode: '',
+                    suburb: '',
+                    lat: '',
+                    lng: '',
+                    location: ''
+                },
+                rules: {
+                    firstName: [
+                        {required: true, message: 'Please fill in the firstName.', trigger: 'blur'},
+                        {
+                            validator: (rule, value, callback) => {
+                                let reg = /[0-9]/;
+                                if (reg.test(value)) {
+                                    callback(new Error('Please enter only letters.'))
+                                } else {
+                                    callback()
+                                }
+                            },
+                            trigger: 'blur'
+                        }
+                    ],
+                    lastName: [
+                        {required: true, message: 'Please fill in the lastName.', trigger: 'blur'},
+                        {
+                            validator: (rule, value, callback) => {
+                                let reg = /[0-9]/;
+                                if (reg.test(value)) {
+                                    callback(new Error('Please enter only letters.'))
+                                } else {
+                                    callback()
+                                }
+                            },
+                            trigger: 'blur'
+                        }
+                    ],
+                    caseDate: [
+                        {type: 'date', required: true, message: 'Please fill in the caseDate.', trigger: 'blur'}
+                    ],
+                    lastUpdated: [
+                        {type: 'date', required: true, message: 'Please fill in the lastUpdated.', trigger: 'blur'}
+                    ],
+                    postcode: [
+                        {required: true, message: 'Please fill in the postcode.', trigger: 'change'},
+                        {min: 4, max: 4, message: 'The length is 4 characters.', trigger: 'blur'},
+                        {
+                            validator: (rule, value, callback) => {
+                                let reg = /^[+]{0,1}(\d+)$/g;
+                                if (!reg.test(value)) {
+                                    callback(new Error('Please enter an integer.'))
+                                } else {
+                                    callback()
+                                }
+                            },
+                            trigger: 'blur'
+                        }
+                    ],
+                    suburb: [
+                        {required: true, message: 'Please fill in the suburb.', trigger: 'change'},
+                        {
+                            validator: (rule, value, callback) => {
+                                let reg = /[0-9]/;
+                                if (reg.test(value)) {
+                                    callback(new Error('Please enter only letters.'))
+                                } else {
+                                    callback()
+                                }
+                            },
+                            trigger: 'blur'
+                        }
+                    ],
+                    lat: [
+                        {required: true, message: 'Please fill in the lat.', trigger: 'change'},
+                        {
+                            validator: (rule, value, callback) => {
+                                let reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g;
+                                if (!reg.test(value)) {
+                                    callback(new Error('Please enter a number with decimal point.'))
+                                } else {
+                                    callback()
+                                }
+                            },
+                            trigger: 'blur'
+                        }
+                    ],
+                    lng: [
+                        {required: true, message: 'Please fill in the lng.', trigger: 'change'},
+                        {
+                            validator: (rule, value, callback) => {
+                                let reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g;
+                                if (!reg.test(value)) {
+                                    callback(new Error('Please enter a number with decimal point.'))
+                                } else {
+                                    callback()
+                                }
+                            },
+                            trigger: 'blur'
+                        }
+                    ],
+                    location: [
+                        {required: true, message: 'Please fill in the location.', trigger: 'blur'}
+                    ]
+                }
+            },
+            methods: {
+                uuid(){
+                    var temp_url = URL.createObjectURL(new Blob());
+                    var uuid = temp_url.toString();
+                    URL.revokeObjectURL(temp_url);
+                    console.log("success")
+                    return uuid.substr(uuid.lastIndexOf("/") + 1);
+                },
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            this.ruleForm.id=this.uuid()
+                            axios.post('/cases', this.ruleForm)
+                            alert('submit!');
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+                handleSelect(key, keyPath) {
+                    console.log(key, keyPath);
+                }
+            }
+        })
+    </script>
+</html>
