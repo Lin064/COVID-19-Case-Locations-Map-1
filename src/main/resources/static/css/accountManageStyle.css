@@ -1,22 +1,41 @@
-.d-flex input{
+.col input {
     margin: .9em 0em;
 }
 
-.d-flex button{
+.d-flex button {
+    height: 30px;
+    weight: 50px;
     margin: 1.5em .6em;
     padding: .3em 2.4em;
 }
 
+.container {
+    position: center;
+}
+
 .container table{
-    margin: 1em 10em;
+    justify-content: center;
 }
 
-table .btnedit{
-    color: rgb(122, 233, 122);
-    cursor: pointer;
+.col label{
+    visibility: hidden;
+    position: absolute;
 }
 
-table .btndelete{
-    color: rgb(243, 96, 96);
-    cursor: pointer;
+.col.error label{
+    bottom: -15px;
+    left: 15px;
+    color:rgb(235, 53, 53);
+    visibility: visible;
+    position: absolute;
 }
+
+/*table .btnedit{*/
+/*    color: rgb(122, 233, 122);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*table .btndelete{*/
+/*    color: rgb(243, 96, 96);*/
+/*    cursor: pointer;*/
+/*}*/

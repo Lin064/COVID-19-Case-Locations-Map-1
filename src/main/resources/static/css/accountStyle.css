@@ -27,7 +27,8 @@ body{
 
 .container form{
     /* max-width: 850px; */
-    width: 300;
+    /*origin:300*/
+    width: 320px;
     background-color: #F3F1F5;
     padding: 40px 30px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.2);
@@ -79,14 +80,17 @@ form .form-content .input-box {
     height: 50px;
     width: 100%;
     /* input间距 */
-    margin: 10px 0;
+    margin: 20px 0;
     position: relative;
+    border: 2px solid #f0f0f0;
+    display: block;
 }
 
 .form-content .input-box input{
-    /* border-radius: 3px; */
+    border-radius: 3px;
     height: 100%;
-    width: 300px;
+    /*300*/
+    width: 250px;
     outline: none;
     border: none;
     padding: 0 30px;
@@ -96,12 +100,18 @@ form .form-content .input-box {
     transition: all 0.3s ease;
 }
 
-.form-content .input-box input:valif {
+.form-content .input-box input:valid {
     border-color: rgb(147, 181, 198);
 }
 
-.form-content .input-box input:focus{
+/* success */
+.form-content.success .input-box input:focus{
     border-color: rgb(147, 181, 198);
+}
+
+/* error */
+.form-content.error .input-box input:focus{
+    border-color: rgb(156, 14, 14);
 }
 
 form .form-content .button {
@@ -120,4 +130,32 @@ form .form-content .button input{
 
 form .form-content .button input:hover{
     background: #6b7aa1;
+}
+
+.input-box i {
+    visibility: hidden;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+}
+
+.input-box.success i.fa-check-circle{
+    color: rgb(77, 219, 101);;
+    visibility: visible;
+}
+
+.input-box.error i.fa-exclamation-circle{
+    color: rgb(235, 53, 53);
+    visibility: visible;
+}
+
+.input-box small{
+    visibility: hidden;
+    position: absolute;
+}
+
+.input-box.error small{
+    color:rgb(235, 53, 53);
+    visibility: visible;
+    position: absolute;
 }
