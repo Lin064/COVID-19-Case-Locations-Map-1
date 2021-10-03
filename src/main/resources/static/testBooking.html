@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test booking form</title>
+    <link href="./css/testbstyle.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+   <h1 id="head">Test Booking Service</h1>
+    <ul id="navigation">
+            <li><span class="active">Overview</span></li>
+            <li><a href="index-page-1.html" target="_self">Home</a></li>
+            <li><a href="testBooking.html" target="_self">TestBooking</a></li>
+            <li><a href="testBookingList.html" target="_self">Histroy</a></li>
+        </ul>
+        <div class="Content-Main">
+            <form  action="" method="post">
+                <br>
+                <h1>Test Booking Form</h1>
+                <span class="text1">Please Enter information so that you will get COVID-19 test at home.</span><br><br>
+                <label>
+                    <span>First Name:</span>
+                    <input type="text"  name="fname" id="fname" placeholder="Your First Name" required>
+                </label>
+
+                <label>
+                    <span>Last name:</span>
+                    <input type="text"  name="lname" id ='lname' placeholder="Your Last Name" required>
+                </label>
+
+                <label>
+                    <span>Street number</span>
+                    <input type="text"  name="strnum" id="strnum" placeholder="Street number you live" required>
+                </label>
+
+                <label>
+                    <span>Street</span>
+                    <input type="text"  name="str" id ='str'  placeholder="The street name you live" required>
+                </label>
+
+                <label>
+                    <span>Suburb</span>
+                    <input type="text"  name="suburb" id="suburb" placeholder="Suburb you live" required>
+                </label>
+
+                            
+                <label>
+                    <span>Your email :</span>
+                    <input type="email" name="email" id='email' placeholder="Enter your connect email" required>
+                </label>
+
+                <label>
+                    <span>Your phone:</span>
+                    <input type="text" name="phone" id="phone" placeholder="Please enter phone number" required>
+                </label>
+
+                <label>
+                    <span>Available Date:</span>
+                    <input type="date" name="testDate" id="date" required>
+                </label>
+                <br>
+
+                <label align = "center">
+                    <input type="button" class="button" value="Submit" onclick="send()">
+                </label>
+                <h2 align="center" style="color: red" id="feedback"> </h2>
+
+            </form>
+        </div>
+</body>
+        <script>
+            function send() {
+                var fname = document.getElementById("fname").value;
+                var lname = document.getElementById("lname").value;
+                var strnum = document.getElementById("strnum").value;
+                var str = document.getElementById("str").value;
+                var suburb = document.getElementById("suburb").value;
+                var email = document.getElementById("email").value;
+                var phone = document.getElementById("phone").value;
+                var date = document.getElementById("date").value;
+                if( Validation()) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: '/testBooking',
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            "fname": fname,
+                            "lname": lname,
+                            "strnum": strnum,
+                            "str": str,
+                            "suburb": suburb,
+                            "email": email,
+                            "phone": phone,
+                            "date": date,
+                            "status": "Continue",
+                            "result": "No Published"
+                        }),
+                        success: function (result) {
+                            alert("You update Booking Successfully");
+                            console.log(result);
+                        }
+                    }); // end of ajax;
+                }// end of if statement
+            }// end of method
+            function Validation(){
+                initial();
+                var flag = true;
+                var emailFlag = true;
+                var phoneFlag = true;
+                var fname = document.getElementById("fname");
+                var lname = document.getElementById("lname");
+                var strnum = document.getElementById("strnum");
+                var str = document.getElementById("str");
+                var suburb = document.getElementById("suburb");
+                var email = document.getElementById("email");
+                var phone = document.getElementById("phone");
+                var date = document.getElementById("date");
+                var feedback = document.getElementById('feedback');
+
+                if(fname.value ===''){fname.placeholder="First name is required";flag=false;}
+                if(lname.value ===''){lname.placeholder="Last name is required";flag=false;}
+                if(strnum.value ===''){strnum.placeholder="Street number is required";flag=false;}
+                if(str.value ===''){str.placeholder = "Street name is required";flag=false;}
+                if(suburb.value ===''){suburb.placeholder = "Suburb is required";flag=false;}
+                if(email.value ===''){email.placeholder="Email is required";flag = false;emailFlag=false;}
+                if(phone.value ===''){phone.placeholder="Phone is required";flag=false;phoneFlag=false;}
+                if(date.value ===''){feedback.innerHTML="Please choose a date!" ;flag=false;}
+                if(emailFlag) {
+                    console.log(isEmail(email.value));
+                    if (!isEmail(email.value)) {
+                        email.value ="";
+                        email.placeholder = "Email format not correct";
+                        flag = false;
+                    }
+                }
+                if(phoneFlag) {
+                    if (!isPhone(phone.value)) {
+                            phone.value = "";
+                            phone.placeholder = "Phone format not correct";
+                            flag = false;
+                    }
+                }
+                return flag;
+            }
+            function initial(){
+                var fname = document.getElementById("fname");
+                var lname = document.getElementById("lname");
+                var strnum = document.getElementById("strnum");
+                var str = document.getElementById("str");
+                var suburb = document.getElementById("suburb");
+                var email = document.getElementById("email");
+                var phone = document.getElementById("phone");
+                var feedback = document.getElementById('feedback');
+
+                fname.placeholder = "Your First Name";
+                lname.placeholder = "Your Last Name";
+                strnum.placeholder="Street number you live";
+                str.placeholder = "Street name you live";
+                suburb.placeholder = "Suburb you live";
+                email.placeholder = "Enter your email";
+                phone.placeholder = "Enter your phone";
+                feedback.innerHTML = "";
+            }
+
+            function isEmail(email){
+                return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+            }
+            function isPhone(phone){
+                return /^(([0-9\ \+\_\-\\(\)])|(ext|x)){6,20}$/.test(phone);
+            }
+        </script>
+</html>
