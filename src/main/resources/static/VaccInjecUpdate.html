@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Location Update</title>
+    <link href="./css/VaccUpdate.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .el-form{
+            padding-top: 48px;
+        }
+        .fw-bold {
+            font-weight: 600!important;
+        }
+    </style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+        .header {
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .topnav a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+</head>
+
+<body onload="send()" style="background-image: url('css/icon-vaccine.jpg')">
+<div class="header">
+    <h1>Vaccine Injection Addresss Update</h1>
+</div>
+<div class="topnav">
+    <a href="vaccInjecManage.html" class="operation">Back to Manage Page</a>
+</div>
+    <form  action="" method="post" class="basic-grey">
+        <br>
+        <label>
+            <span>Location No: </span>
+            <input type="text" id="Id" readonly>
+        </label>
+
+        <label>
+            <span>Street:</span>
+            <input type="text" id="vaccStreet" name="vaccStreet" placeholder="New Street" >
+        </label>
+
+        <label>
+            <span>Suburb:</span>
+            <input type="text" id="vaccSuburb" name="vaccSuburb" placeholder="New Suburb" required >
+        </label>
+
+        <label>
+            <span>Available</span>
+            <input type="text" id="isAvailable" name="isAvailable" placeholder="Yes or No" required >
+        </label>
+
+        <label>
+            <span>Remaining Vaccine</span>
+            <input type="text" id="remainingVaccine" name="remainingVaccine" placeholder="Number" required >
+        </label>
+
+        <label>
+            <span>Location Name</span>
+            <input type="text"  id ="locationName" name="locationName" placeholder="New Location Name" required >
+        </label>
+
+        <label>
+            <span>Booking Website :</span>
+            <input type="email" id="bookingWebsite" name="bookingWebsite" placeholder="New Booking Website" required>
+        </label>
+        <label>
+            <span>Contact Number:</span>
+            <input type="text" id="bookingTel" name="bookingTel" placeholder="New Contact Number" required >
+        </label>
+
+        <label>
+            <span>Location Longitude:</span>
+            <input type="text" id="locationLongitude" name="locationLongitude" placeholder="New Longitude" required >
+        </label>
+
+        <label>
+            <span>Location Latitude:</span>
+            <input type="text" id="locationLatitude" name="locationLatitude" placeholder="New Latitude" required >
+        </label>
+
+        </br>
+        <label align = "center">
+            <input type="button" class="button" value="Update" onclick="send()">
+        </label>
+    </form>
+
+</body>
+
+<script>
+    function send() {
+        var vaccStreet = document.getElementById("vaccStreet").value;
+        var vaccSuburb = document.getElementById("vaccSuburb").value;
+        var isAvailable = document.getElementById("isAvailable").value;
+        var remainingVaccine = document.getElementById("remainingVaccine").value;
+        var locationName = document.getElementById("locationName").value;
+        var bookingWebsite = document.getElementById("bookingWebsite").value;
+        var bookingTel = document.getElementById("bookingTel").value;
+        var locationLongitude = document.getElementById("locationLongitude").value;
+        var locationLatitude = document.getElementById("locationLatitude").value;
+        if( Validation()) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/VaccInjectLocation2',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "vaccStreet": vaccStreet,
+                    "vaccSuburb": vaccSuburb,
+                    "isAvailable": isAvailable,
+                    "remainingVaccine": remainingVaccine,
+                    "locationName": locationName,
+                    "bookingWebsite": bookingWebsite,
+                    "bookingTel": bookingTel,
+                    "locationLongitude": locationLongitude,
+                    "locationLatitude": locationLatitude,
+                }),
+                success: function (result) {
+                    alert("Successfully update a new location");
+                    console.log(result);
+                }
+            }); // end of ajax;
+        }// end of if statement
+    }// end of method
+    function Validation(){
+        initial();
+        var flag = true;
+        var bookingTelFlag = true;
+        var vaccStreet = document.getElementById("vaccStreet");
+        var vaccSuburb = document.getElementById("vaccSuburb");
+        var isAvailable = document.getElementById("isAvailable");
+        var remainingVaccine = document.getElementById("remainingVaccine");
+        var locationName = document.getElementById("locationName");
+        var bookingWebsite = document.getElementById("bookingWebsite");
+        var bookingTel = document.getElementById("bookingTel");
+        var locationLongitude = document.getElementById("locationLongitude");
+        var locationLatitude = document.getElementById('locationLatitude');
+
+        if(vaccStreet.value ===''){vaccStreet.placeholder="required to fill in";flag=false;}
+        if(vaccSuburb.value ===''){vaccSuburb.placeholder="required to fill in";flag=false;}
+        if(isAvailable.value ===''){isAvailable.placeholder="required to fill in";flag=false;}
+        if(remainingVaccine.value ===''){remainingVaccine.placeholder = "required to fill in";flag=false;}
+        if(locationName.value ===''){locationName.placeholder = "required to fill in";flag=false;}
+        if(bookingWebsite.value ===''){bookingWebsite.placeholder="required to fill in";flag = false;}
+        if(bookingTel.value ===''){bookingTel.placeholder="required to fill in";flag=false;bookingTelFlag=false;}
+        if(locationLongitude.value ===''){locationLongitude.placeholder="required to fill in";flag=false;}
+        if(locationLatitude.value ===''){locationLatitude.placeholder="required to fill in";flag=false;}
+
+        if(bookingTelFlag) {
+            if (!isbookingTel(bookingTel.value)) {
+                bookingTel.value = "";
+                bookingTel.placeholder = "Contact Number format is wrong";
+                flag = false;
+            }
+        }
+        return flag;
+    }
+    function initial(){
+        var vaccStreet = document.getElementById("vaccStreet");
+        var vaccSuburb = document.getElementById("vaccSuburb");
+        var isAvailable = document.getElementById("isAvailable");
+        var remainingVaccine = document.getElementById("remainingVaccine");
+        var locationName = document.getElementById("locationName");
+        var bookingWebsite = document.getElementById("bookingWebsite");
+        var bookingTel = document.getElementById("bookingTel");
+        var locationLongitude = document.getElementById("locationLongitude");
+        var locationLatitude = document.getElementById('locationLatitude');
+
+        vaccStreet.placeholder = "New Street";
+        vaccSuburb.placeholder = "New Suburb";
+        isAvailable.placeholder="Yes or No";
+        remainingVaccine.placeholder = "New Number";
+        locationName.placeholder = "New Location Name";
+        bookingWebsite.placeholder = "New Booking Website";
+        bookingTel.placeholder = "New Contact Number";
+        locationLongitude.placeholder = "New Longitude";
+        locationLatitude.placeholder = "New Latitude";
+    }
+
+    function isbookingTel(bookingTel){
+        return /^(([0-9\ \+\\-\\(\)])|(ext|x)){6,20}$/.test(bookingTel);
+    }
+</script>
+</html>
