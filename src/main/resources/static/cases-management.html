@@ -74,7 +74,7 @@
                             <div class="card-body pt-0">
                                 <!--table-->
                                 <el-table
-                                        :data="tableData.filter(data => !search || data.firstName.toLowerCase().includes(search.toLowerCase()) || data.lastName.toLowerCase().includes(search.toLowerCase()))"
+                                        :data="tableData.filter(data => !search || data.firstName.toLowerCase().includes(search.toLowerCase()) || data.lastName.toLowerCase().includes(search.toLowerCase()) || data.location.toLowerCase().includes(search.toLowerCase()))"
                                         style="width: 100%">
                                     <el-table-column
                                             label="FirstName"
@@ -88,6 +88,10 @@
                                             label="CaseDate"
                                             prop="caseDate"
                                             :formatter="timeFilter">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="Location"
+                                            prop="location">
                                     </el-table-column>
                                     <el-table-column
                                             align="right">
@@ -312,7 +316,8 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         axios.put('/cases', this.ruleForm)
-                        alert('submit!');
+                        alert('submit!')
+                        this.resetForm('ruleForm')
                     } else {
                         console.log('error submit!!');
                         return false;
