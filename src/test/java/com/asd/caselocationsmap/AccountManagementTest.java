@@ -34,7 +34,7 @@ public class AccountManagementTest {
     @DisplayName("Test Create staff account")
     void createStaffAccount() throws Exception {
         int id = getID();
-        String content = "{\"staffId\":"+id +",\"staffEmail\": \"qqq@company.com\", \"staffPassword\": \"a123456\"}";
+        String content = "{\"staffId\":"+id +",\"staffEmail\": \"test@qq.com\", \"staffPassword\": \"testAdd\"}";
         System.out.println(content);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/staffAccount")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +73,7 @@ public class AccountManagementTest {
     @DisplayName("Test Update Staff Account")
     void updateAccount() throws Exception {
         int id = getID();
-        String content = "{\"staffId\":"+id +",\"staffEmail\": \"qqq@company.com\", \"staffPassword\": \"123456\"}";
+        String content = "{\"staffId\":"+id +",\"staffEmail\": \"test@qq.com\", \"staffPassword\": \"testUpdate\"}";
         System.out.println(content);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/updates")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,8 +82,8 @@ public class AccountManagementTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 //.andExpect(jsonPath("$.staffId").value(id))
-                .andExpect(jsonPath("$.staffEmail").value("qqq@company.com"))
-                .andExpect(jsonPath("$.staffPassword").value("123456"));
+                .andExpect(jsonPath("$.staffEmail").value("test@qq.com"))
+                .andExpect(jsonPath("$.staffPassword").value("testUpdate"));
     }
 
 
@@ -112,10 +112,14 @@ public class AccountManagementTest {
         if(json.size()==0){
             return 0;
         }
+        for(int i =0; i<json.size();i++){
+            JSONObject j = json.getJSONObject(i);
+            if(j.getString("staffEmail").equals("test@qq.com")){
+                return j.getIntValue("staffId");
+            }
+        }
 
-        JSONObject ob = json.getJSONObject(json.size()-1);
-        int id = ob.getIntValue("staffId");
-        return id;
+        return 0;
     }
 
 }

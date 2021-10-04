@@ -52,7 +52,7 @@ public class StaffAccountController {
     }
 
     @RequestMapping(value ="/verifyStaff", method = RequestMethod.POST)
-    public boolean verifyCustomer(@RequestBody StaffAccount sa, HttpServletResponse resp, ServletRequest request) throws Exception {
+    public boolean verifyStaff(@RequestBody StaffAccount sa, HttpServletResponse resp, ServletRequest request) throws Exception {
         ReadStaffAccountSql rsaq = new ReadStaffAccountSql();
         boolean flag = rsaq.verifyAccount(sa);
         HttpServletRequest req = (HttpServletRequest) request;
