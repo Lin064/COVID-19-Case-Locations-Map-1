@@ -80,6 +80,7 @@ public class TestBookingControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         JSONArray json = JSONArray.parseArray(result);
+        // if(json.size()==0) return 0;
         JSONObject ob = json.getJSONObject(json.size()-1);
         int id =ob.getIntValue("id");
         return  id;

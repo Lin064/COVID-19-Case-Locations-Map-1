@@ -49,6 +49,17 @@ public class AccessCheckController {
         resp.getWriter().write(JsonStr);
     }
 
+    @RequestMapping(value ="/toLogout", method = RequestMethod.POST)
+    public void logout(HttpServletResponse resp, ServletRequest request) throws Exception {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpSession session = req.getSession();
+        session.invalidate();
+        String JsonStr = JSON.toJSONString("logout", SerializerFeature.PrettyFormat);
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        resp.getWriter().write(JsonStr);
+    }
+
 
 
 

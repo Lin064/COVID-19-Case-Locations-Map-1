@@ -13,7 +13,6 @@ public class UpdateStaffAccountSql {
             String password = "Mypassword1@";
             String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
-
             String sql = "update StaffAccount set staffemail = '"+sa.getStaffEmail()+"', staffpassword = '"+sa.getStaffPassword()+"' where staffid = '"+sa.getStaffId()+"'";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
