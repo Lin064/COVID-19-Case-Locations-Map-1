@@ -89,9 +89,9 @@ public class TestBookingControllerTest {
     @Order (3)
     @Test
     @DisplayName("test read bookings by suburb")
-    void readBookingsByEmail() throws Exception {
+    void readBookingsBySuburb() throws Exception {
         String content = "\"Auburn\"";
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/findBookingbyEmail")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/findBookingbySuburb")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content);
@@ -101,8 +101,22 @@ public class TestBookingControllerTest {
 
     @Order (4)
     @Test
+    @DisplayName("test read bookings by email")
+    void readBookingsByEmail() throws Exception {
+        String content = "\"1179903915@qq.com\"";
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/findBookingbyEmail")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
+    }
+
+
+    @Order (5)
+    @Test
     @DisplayName("test update booking")
-    void updateCase() throws Exception {
+    void updateBooking() throws Exception {
         int id = getID();
         String content = "{\"id\":"+id+",\"fname\":\"UpdateTest\",\"lname\":\"UpdateTest\",\"strnum\":\"06\",\"str\":\"royal\",\"suburb\":\"Auburn\",\"email\":\"1179903915@qq.com\",\"phone\":\"18759111420\",\"date\":\"2021-10-06\",\"status\":\"Continue\",\"result\":\"No Published\"}";
 
@@ -117,7 +131,7 @@ public class TestBookingControllerTest {
                 .andExpect(jsonPath("$.lname").value("UpdateTest"));
     }
 
-    @Order (5)
+    @Order (6)
     @Test
     @DisplayName("test delete booking")
     void deleteBooking() throws Exception {
