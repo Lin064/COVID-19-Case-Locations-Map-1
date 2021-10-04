@@ -10,6 +10,7 @@
             var newHref = "./updateBookingByUser.html?id=" + id
             window.location.href = newHref;
         }
+
         function checkUserLogin(){
             $.ajax({
                 type: "POST",
@@ -48,6 +49,7 @@
                         var td5 = document.createElement('td');
                         var td6 = document.createElement('td');
                         var td7 = document.createElement('td');
+
                         row.append(td1);
                         row.append(td2);
                         row.append(td3);
@@ -55,9 +57,12 @@
                         row.append(td5);
                         row.append(td6);
                         row.append(td7);
+
                         var str1 = "";
+
                         if (objArray[i].status == "Continue") {
                             var str1 = "<input type=\"button\"  value=\"Update\" onClick=\"editBooking('" + objArray[i].id + "')\">"
+
                         }//end of if
                             td1.innerHTML = objArray[i].id;
                             td2.innerHTML = objArray[i].email;
@@ -66,6 +71,8 @@
                             td5.innerHTML = objArray[i].result;
                             td6.innerHTML = objArray[i].status;
                             td7.innerHTML = str1;
+
+
                     }// end of for
                 }// end of success function
             }); // end of ajax
@@ -75,7 +82,7 @@
     <h1 id="head">Test Booking Service</h1>
     <ul id="navigation">
             <li><span class="active">Overview</span></li>
-            <li><a href="index-page-3.html" target="_self">Main Page</a></li>
+            <li><a href="index-page-3.html" target="_self">Home</a></li>
             <li><a href="testBooking.html" target="_self">TestBooking</a></li>
             <li><a href="testBookingList.html" target="_self">Histroy</a></li>
         </ul>
@@ -91,6 +98,7 @@
             <th>Result</th>
             <th>Status</th>
             <th>&nbsp Update &nbsp</th>
+
         </tr>
 
     </table>
