@@ -10,14 +10,30 @@
             var newHref = "./updateBookingByUser.html?id=" + id
             window.location.href = newHref;
         }
-
-        function getListbyEmail() {
+        function checkUserLogin(){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'checkUserLogin',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result==="") {
+                        alert("Testing booking services require Login First!");
+                        window.location.href = "userLogin.html";
+                    } else{
+                        getListbyEmail(result);
+                    }
+                }
+            });
+        }
+        function getListbyEmail(email) {
+            checkUserLogin()
             $.ajax({
                 type: "POST",
                 dataType: "json",
                 url: '/findBookingbyEmail',
                 contentType: "application/json",
-                data: "1179903915@qq.com",
+                data: email,
                 success: function (result) {
                     // json string
                     var objArray = eval(result);
@@ -56,11 +72,11 @@
             }); // end of ajax
         }
     </script>
-<body onload="getListbyEmail()">
+<body onload="checkUserLogin()">
     <h1 id="head">Test Booking Service</h1>
     <ul id="navigation">
             <li><span class="active">Overview</span></li>
-            <li><a href="index-page-1.html" target="_self">Main Page</a></li>
+            <li><a href="index-page-3.html" target="_self">Main Page</a></li>
             <li><a href="testBooking.html" target="_self">TestBooking</a></li>
             <li><a href="testBookingList.html" target="_self">Histroy</a></li>
         </ul>

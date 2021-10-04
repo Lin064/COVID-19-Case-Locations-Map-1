@@ -1,8 +1,9 @@
 package com.asd.caselocationsmap.dao;
-import com.asd.caselocationsmap.entity.StaffAccount;
-import java.sql.*;
 
-public class CreateStaffAccountSql {
+
+import com.asd.caselocationsmap.entity.CustomerAccount;
+import java.sql.*;
+public class CreateCustomerAccountSql {
     public boolean checkEmailExistence(String email){
         try{
             String username = "asd";
@@ -10,7 +11,7 @@ public class CreateStaffAccountSql {
             String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
 
-            String sql = "Select * from StaffAccount where staffemail='"+email+"'";
+            String sql = "Select * from Register where email='"+email+"'";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             int i = 0;
@@ -28,26 +29,27 @@ public class CreateStaffAccountSql {
             return false;
         }
     }
-    public boolean createStaffAccount(StaffAccount staffaccount) {
+
+
+
+    public boolean createCustomerAccount(CustomerAccount ca) {
         try{
             String username = "asd";
             String password = "Mypassword1@";
             String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
-            if (!checkEmailExistence(staffaccount.getStaffEmail())){
+            if(!checkEmailExistence(ca.getEmail())){
                 conn.close();
                 return false;
             }
-            String sql = "insert into StaffAccount (staffid, staffemail, staffpassword) values (default, '" +staffaccount.getStaffEmail()+"', '"+staffaccount.getStaffPassword()+"');";;
+            String sql = "insert into Register(email,name,phone,password) Values('"+ca.getEmail()+"','" +ca.getName()+"','"+ca.getPhone()+"','"+ca.getPassword()+"'" +")";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
             conn.close();
             return true;
         } catch (SQLException e) {
-            System.out.println("Error occurred at ConSql->createAccount()");
+            System.out.println("Error occurred at ConSql->createCutomerAccount()");
             return false;
         }
-
     }
-
 }

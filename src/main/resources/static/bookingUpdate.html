@@ -59,7 +59,7 @@
         }
     </script>
 </head>
-<body onload="getBooking()">
+<body onload="checkManagerLogin()">
 	<h1 id="head">Test Booking Update</h1>
     <ul id="navigation">
             <li><span class="active">Overview</span></li>
@@ -237,5 +237,21 @@
     }
     function isPhone(phone){
         return /^(([0-9\ \+\_\-\\(\)])|(ext|x)){6,20}$/.test(phone);
+    }
+
+    function  checkManagerLogin(){
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '/checkManagerLogin',
+            contentType: "application/json",
+            success: function (result) {
+                if (result==="") {
+                    window.location.href = "403.html";
+                } else{
+                    getBooking()
+                }
+            }
+        });
     }
 </script>

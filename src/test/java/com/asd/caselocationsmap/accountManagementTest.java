@@ -40,9 +40,13 @@ public class accountManagementTest {
                 .andReturn().getResponse().getContentAsString();
 
         JSONArray json = JSONArray.parseArray(result);
+        if(json.size()>0){
         JSONObject ob = json.getJSONObject(json.size()-1);
         int id = ob.getIntValue("staffId");
-        return id;
+            return id;
+        }
+        return 0 ;
+
     }
 
     @Order(1)
@@ -50,17 +54,17 @@ public class accountManagementTest {
     @DisplayName("Test Create staff account")
     void createStaffAccount() throws Exception {
         int id = getID();
-        String content = "{\"staffId\":"+id +",\"staffEmail\": \"qqq@company.com\", \"staffPassword\": \"123456\"}";
+
+        String content = "{\"staffId\":"+id +",\"staffEmail\": \"qqq@company.com\", \"staffPassword\": \"a123456\"}";
+        System.out.println(content);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/staffAccount")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content);
 
         mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
-                //.andExpect(jsonPath("$.staffId").value("id"))
-                .andExpect(jsonPath("$.staffEmail").value("qqq@company.com"))
-                .andExpect(jsonPath("$.staffPassword").value("123456"));
+                .andExpect(status().isOk());
+                //.andExpect(jsonPath("$.staffId").value(id))
 
     }
 
@@ -102,7 +106,7 @@ public class accountManagementTest {
     @DisplayName("Test Delete Account")
     void deleteAccount() throws Exception {
         //int id = getID();
-        String content = "0";
+        String content = String.valueOf(getID());
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/deleteAccount")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

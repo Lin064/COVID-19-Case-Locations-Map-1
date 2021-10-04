@@ -3,23 +3,25 @@ package com.asd.caselocationsmap.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.asd.caselocationsmap.dao.CreateStaffAccountSql;
+import com.asd.caselocationsmap.dao.*;
 
-import com.asd.caselocationsmap.dao.DeleteStaffAccountSql;
-import com.asd.caselocationsmap.dao.ReadStaffAccountSql;
-import com.asd.caselocationsmap.dao.UpdateStaffAccountSql;
+import com.asd.caselocationsmap.entity.CustomerAccount;
 import com.asd.caselocationsmap.entity.StaffAccount;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
 public class StaffAccountController {
     @RequestMapping(value="/staffAccount", method = RequestMethod.POST)
-    public StaffAccount postStaffAccount(@RequestBody StaffAccount sa, HttpServletResponse resp) throws Exception{
+    public boolean postStaffAccount(@RequestBody StaffAccount sa, HttpServletResponse resp) throws Exception{
         CreateStaffAccountSql createStaffAccountSql = new CreateStaffAccountSql();
-        createStaffAccountSql.createStaffAccount(sa);
-        return sa;
+        boolean flag = createStaffAccountSql.createStaffAccount(sa);
+        return flag;
     }
 
     @RequestMapping(value="/readAccounts", method = RequestMethod.POST)
@@ -47,6 +49,22 @@ public class StaffAccountController {
         UpdateStaffAccountSql updateStaffAccountSql = new UpdateStaffAccountSql();
         updateStaffAccountSql.updateAccount(sa);
         return sa;
+    }
+
+    @RequestMapping(value ="/verifyStaff", method = RequestMethod.POST)
+    public boolean verifyCustomer(@RequestBody StaffAccount sa, HttpServletResponse resp, ServletRequest request) throws Exception {
+        ReadStaffAccountSql rsaq = new ReadStaffAccountSql();
+        boolean flag = rsaq.verifyAccount(sa);
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpSession session = req.getSession();
+
+        if(flag){
+            session.setAttribute("isStaff",true);
+            session.setAttribute("email",sa.getStaffEmail());
+        } else{
+        session.setAttribute("isStaff",false);
+        session.setAttribute("email","");}
+        return flag;
     }
 
 }
