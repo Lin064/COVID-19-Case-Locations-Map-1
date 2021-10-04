@@ -9,6 +9,12 @@
     padding: .3em 2.4em;
 }
 
+.b-flex button {
+    position: fixed;
+    top: 100px;
+    right: 100px;
+}
+
 .container {
     position: center;
 }

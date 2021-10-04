@@ -42,6 +42,9 @@
 <div class="d-flex justify-content-center">
     <button type="submit" class="btn btn-success" id="btn-create" onclick="checkInputs()">Create</button>
 </div>
+<div class="b-flex justify-content-center">
+    <button type="submit" class="btn btn-back" id="btn-back" onclick="goMain()">Back Home</button>
+</div>
 
 <div class="container">
     <form>
@@ -60,6 +63,10 @@
 </div>
 </center>
 <script>
+
+    function goMain() {
+        window.location.href = "index-page-2.html"
+    }
 
     const form = document.getElementById('form');
     const staffemail = document.getElementById('staffemail');
