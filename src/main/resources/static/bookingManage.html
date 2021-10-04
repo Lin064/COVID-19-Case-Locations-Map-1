@@ -47,7 +47,7 @@
             }
         }
     </script>
-<body onload="getList()">
+<body onload=checkManagerLogin()>
  <ul id="navigation" >
             <li><span class="active">Overview</span></li>
             <li><a href="index-page-2.html" target="_self">Home</a></li>
@@ -138,5 +138,21 @@
                 td8.innerHTML = str2;
             }
 
+        }
+
+        function  checkManagerLogin(){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/checkManagerLogin',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result==="") {
+                        window.location.href = "403.html";
+                    } else{
+                        getList()
+                    }
+                }
+            });
         }
     </script>

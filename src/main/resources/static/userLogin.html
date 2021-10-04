@@ -33,6 +33,7 @@
                             <b id="Err" style="color: red"></b>
                         </div><br>
                         <div class="button input-box">
+
                             <input type=button value="Submit" onclick="verrify()">
                         </div>
                         <div class="text"><a href="#">Forget password?</a></div>
@@ -50,6 +51,8 @@
                   var email = document.getElementById("useremail");
                   var password = document.getElementById("userpassword");
                   err.innerHTML = "";
+
+
                   $.ajax({
                       type: "POST",
                       dataType: "json",
@@ -65,7 +68,7 @@
                               var err = document.getElementById("Err");
                               err.innerHTML = "Incorrect email or password";
                           }else{
-                              window.location.href = "index-page-1.html";
+                              window.location.href = "index-page-3.html";
                           }
                       }
                   });

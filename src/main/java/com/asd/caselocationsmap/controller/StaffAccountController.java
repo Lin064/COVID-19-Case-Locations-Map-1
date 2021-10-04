@@ -61,9 +61,9 @@ public class StaffAccountController {
         if(flag){
             session.setAttribute("isStaff",true);
             session.setAttribute("email",sa.getStaffEmail());
-        }
+        } else{
         session.setAttribute("isStaff",false);
-        session.setAttribute("email","");
+        session.setAttribute("email","");}
         return flag;
     }
 

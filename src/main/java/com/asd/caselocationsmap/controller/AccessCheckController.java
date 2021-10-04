@@ -16,25 +16,37 @@ import java.util.List;
 public class AccessCheckController {
 
     @RequestMapping(value ="/checkUserLogin", method = RequestMethod.POST)
-    public String verifyUserLogin(HttpServletResponse resp, ServletRequest request) throws Exception {
+    public void verifyUserLogin(HttpServletResponse resp, ServletRequest request) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
-        boolean isCustomer = (boolean)session.getAttribute("isCustomer");
-        if(isCustomer){
-            return (String)session.getAttribute("email");
+        String email = "";
+        if(session.getAttribute("isCustomer")!=null){
+            boolean flag = (boolean)session.getAttribute("isCustomer");
+            if(flag){
+                email = (String)session.getAttribute("email");
+            }
         }
-        return "";
+        String JsonStr = JSON.toJSONString(email, SerializerFeature.PrettyFormat);
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        resp.getWriter().write(JsonStr);
     }
 
     @RequestMapping(value ="/checkManagerLogin", method = RequestMethod.POST)
-    public String verifyManagerLogin(HttpServletResponse resp, ServletRequest request) throws Exception {
+    public void verifyManagerLogin(HttpServletResponse resp, ServletRequest request) throws Exception {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
-        boolean isStaff = (boolean)session.getAttribute("isStaff");
-        if(isStaff){
-            return (String)session.getAttribute("email");
+        String email = "";
+        if(session.getAttribute("isStaff")!=null){
+            boolean flag = (boolean)session.getAttribute("isStaff");
+            if(flag){
+                email = (String)session.getAttribute("email");
+            }
         }
-        return "";
+        String JsonStr = JSON.toJSONString(email, SerializerFeature.PrettyFormat);
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        resp.getWriter().write(JsonStr);
     }
 
 

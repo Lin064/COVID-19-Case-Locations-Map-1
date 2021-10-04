@@ -1,14 +1,28 @@
 
-function checkUserLogin{
+function checkUserLogin(){
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: 'checkUserLogin',
+        url: '/checkUserLogin',
         contentType: "application/json",
         success: function (result) {
-            if (email.length > 0) {
-            } else {
+            if (result==="") {
+                alert("Testing booking services require Login First!");
                 window.location.href = "userLogin.html";
+            }
+        }
+    });
+}
+
+function  checkManagerLogin(){
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: '/checkManagerLogin',
+        contentType: "application/json",
+        success: function (result) {
+            if (result==="") {
+                window.location.href = "403.html";
             }
         }
     });

@@ -33,9 +33,10 @@ public class CustomerController {
          if(flag){
              session.setAttribute("isCustomer",true);
              session.setAttribute("email",ca.getEmail());
+         } else {
+             session.setAttribute("isCustomer", false);
+             session.setAttribute("email", "");
          }
-        session.setAttribute("isCustomer",false);
-        session.setAttribute("email","");
          return flag;
     }
 
