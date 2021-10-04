@@ -27,7 +27,6 @@
             });
         }
         function getListbyEmail(email) {
-            checkUserLogin()
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -59,6 +58,7 @@
                         var str1 = "";
                         if (objArray[i].status == "Continue") {
                             var str1 = "<input type=\"button\"  value=\"Update\" onClick=\"editBooking('" + objArray[i].id + "')\">"
+                        }//end of if
                             td1.innerHTML = objArray[i].id;
                             td2.innerHTML = objArray[i].email;
                             td3.innerHTML = objArray[i].strnum + " " + objArray[i].str + " " + objArray[i].suburb;
@@ -66,7 +66,6 @@
                             td5.innerHTML = objArray[i].result;
                             td6.innerHTML = objArray[i].status;
                             td7.innerHTML = str1;
-                        }//end of if
                     }// end of for
                 }// end of success function
             }); // end of ajax
