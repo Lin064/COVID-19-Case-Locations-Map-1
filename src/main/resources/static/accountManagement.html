@@ -43,7 +43,7 @@
     <button type="submit" class="btn btn-success" id="btn-create" onclick="checkInputs()">Create</button>
 </div>
 <div class="b-flex justify-content-center">
-    <button type="submit" class="btn btn-back" id="btn-back" onclick="goMain()">Back Home</button>
+    <button type="submit" class="btn btn-back" id="btn-primary" onclick="goMain()">Back Home</button>
 </div>
 
 <div class="container">
@@ -67,7 +67,7 @@
     function goMain() {
         window.location.href = "index-page-2.html"
     }
-
+    //Check manager's inputs
     const form = document.getElementById('form');
     const staffemail = document.getElementById('staffemail');
     const staffpassword = document.getElementById('staffpassword');
@@ -114,6 +114,7 @@
         return /^(?![^a-zA-Z]+$)(?!\D+$).{6,8}$/.test(staffpassword);
     }
 
+    //Create the staff account
     function send() {
         var staffemail = document.getElementById('staffemail').value;
         var staffpassword = document.getElementById('staffpassword').value;
@@ -139,6 +140,7 @@
         });
     }
 
+    //Output the account in database
     function readAccounts() {
         $.ajax({
             type: "POST",
@@ -175,6 +177,7 @@
         });
     }
 
+    //Go to the update page
     function jump(id) {
         window.location.href="./staffAccountUpdate.html?id="+id;
     }
