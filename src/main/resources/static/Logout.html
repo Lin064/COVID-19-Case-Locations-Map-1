@@ -4,8 +4,22 @@
     <link rel="stylesheet" href="css/logout.css">
     <meta charset="UTF-8">
     <title>Logout page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <Script>
+        function logout(){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/toLogout',
+                contentType: "application/json",
+                success: function (result) {
+                    window.location.href = "login.html";
+                }
+            }); // end of ajax;
+        }
+    </Script>
 </head>
-<body>
+<body onload="logout()">
     <div class="logoutTitle">Take care and stay safe</div>
 </body>
 </html>

@@ -46,8 +46,6 @@ public class ReadStaffAccountSql {
                         Statement stmt = conn.createStatement();
                         String sql = "SELECT * FROM StaffAccount Where staffemail ='"+sa.getStaffEmail()+"';" ;
                         String   password1 = sa.getStaffPassword();
-                        System.out.println(password1);
-                        System.out.println(sql);
                         String  dbPwd = "";
                         ResultSet rs = stmt.executeQuery(sql);
                         int i = 0;

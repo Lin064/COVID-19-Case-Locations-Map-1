@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "CasesFilter", urlPatterns = "/create-cases.html")
+@WebFilter(filterName = "CasesFilter", urlPatterns = {"/create-cases.html","/cases-management.html"})
 public class CasesFilter implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }
