@@ -11,8 +11,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
+
 @RestController
 public class CustomerController {
     @RequestMapping(value ="/createCustomer", method = RequestMethod.POST)
@@ -21,6 +21,20 @@ public class CustomerController {
         CreateCustomerAccountSql casql = new CreateCustomerAccountSql();
         boolean flag = casql.createCustomerAccount(ca);
         return flag;
+    }
+
+    @RequestMapping(value="/readAccount", method = RequestMethod.POST)
+    public CustomerAccount readAccount(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception {
+        ReadCustomerAccountSql readCustomerAccountSql = new ReadCustomerAccountSql();
+        CustomerAccount cas = readCustomerAccountSql.customerAccount(ca.getEmail());
+        return cas;
+    }
+
+    @RequestMapping(value="/updateAccount", method = RequestMethod.POST)
+    public CustomerAccount updateCustomerAccount(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception{
+        UpdateCustomerAccountSql updateCustomerAccountSql = new UpdateCustomerAccountSql();
+        updateCustomerAccountSql.updateCustomerAccount(ca);
+        return ca;
     }
 
     @RequestMapping(value ="/verifyCustomer", method = RequestMethod.POST)
