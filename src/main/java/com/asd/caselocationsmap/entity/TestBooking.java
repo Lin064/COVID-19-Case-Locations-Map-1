@@ -1,6 +1,6 @@
 package com.asd.caselocationsmap.entity;
 
-import java.util.Date;
+
 
 public class TestBooking {
     private int id;
