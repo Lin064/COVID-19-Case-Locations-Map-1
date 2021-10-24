@@ -10,8 +10,8 @@ public class CreateDailyRecordSql {
     public DailyRecord createDailyRecord(DailyRecord dr) {
         try{
             String username = "asd";
-            String password = "Mypassword1@";
-            String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             //String sql = "Insert Into TestBooking(booking_id,fname,lname,strnum,str,suburb,email, phone, test_date, b_status, result) Values(default, '"+tb.getFname()+"','"+ tb.getLname()+"','"+tb.getStrnum()+"','"+ tb.getStr()+"','"+tb.getSuburb()+"','"+tb.getEmail()+"','"+ tb.getPhone()+"','"+ tb.getDate()+"','"+ tb.getStatus()+"','"+ tb.getResult()+"');";
             Statement stmt = conn.createStatement();

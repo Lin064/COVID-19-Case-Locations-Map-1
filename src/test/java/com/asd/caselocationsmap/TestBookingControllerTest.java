@@ -2,24 +2,22 @@ package com.asd.caselocationsmap;
 
 import com.alibaba.fastjson.JSONObject;
 import com.asd.caselocationsmap.controller.BookingController;
-import com.asd.caselocationsmap.controller.CasesController;
-import com.asd.caselocationsmap.entity.TestBooking;
-import org.apache.coyote.Response;
+
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import com.alibaba.fastjson.JSON;
+
 import com.alibaba.fastjson.JSONArray;
-import java.util.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @WebMvcTest(BookingController.class)
@@ -144,4 +142,5 @@ public class TestBookingControllerTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk());
     }
+
 }

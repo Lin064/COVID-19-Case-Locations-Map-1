@@ -12,8 +12,8 @@ public class ReadCustomerAccountSql {
     public CustomerAccount customerAccount (String email){
         try {
             String username = "asd";
-            String password = "Mypassword1@";
-            String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Register where email = '"+ email+"'");
