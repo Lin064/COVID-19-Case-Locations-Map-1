@@ -29,7 +29,6 @@ public class CustomerController {
          boolean flag = rca.verifyAccount(ca);
          HttpServletRequest req = (HttpServletRequest) request;
          HttpSession session = req.getSession();
-
          if(flag){
              session.setAttribute("isCustomer",true);
              session.setAttribute("email",ca.getEmail());
