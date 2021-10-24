@@ -13,7 +13,7 @@ public class ReadCustomerAccountSql {
         try {
             String username = "asd";
             String password = "ASDpassword";
-            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Register where email = '"+ email+"'");
@@ -39,8 +39,8 @@ public class ReadCustomerAccountSql {
     public boolean verifyAccount(CustomerAccount ca){
         try {
             String username = "asd";
-            String password = "Mypassword1@";
-            String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
             String sql = "SELECT * FROM Register Where email ='"+ca.getEmail()+"';" ;

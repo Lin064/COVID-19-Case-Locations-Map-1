@@ -10,7 +10,7 @@ public class CreateTestBookingSql {
         try{
             String username = "asd";
             String password = "ASDpassword";
-            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             String sql = "Insert Into TestBooking(booking_id,fname,lname,strnum,str,suburb,email, phone, test_date, b_status, result) Values(default, '"+tb.getFname()+"','"+ tb.getLname()+"','"+tb.getStrnum()+"','"+ tb.getStr()+"','"+tb.getSuburb()+"','"+tb.getEmail()+"','"+ tb.getPhone()+"','"+ tb.getDate()+"','"+ tb.getStatus()+"','"+ tb.getResult()+"');";
                     /*

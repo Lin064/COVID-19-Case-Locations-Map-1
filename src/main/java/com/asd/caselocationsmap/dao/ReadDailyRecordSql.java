@@ -11,7 +11,7 @@ public class ReadDailyRecordSql {
         try {
             String username = "asd";
             String password = "ASDpassword";
-            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
             String sql = "SELECT * FROM DailyCOVIDRecord;";
@@ -42,8 +42,8 @@ public class ReadDailyRecordSql {
     public DailyRecord getDailyRecordbyDate(String date) {
         try {
             String username = "asd";
-            String password = "Mypassword1@";
-            String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
             String sql = "SELECT * FROM DailyCOVIDRecord where publish_date = '"+date+"'";
@@ -72,8 +72,8 @@ public class ReadDailyRecordSql {
     public DailyRecord getLatestDailyRecord() {
         try {
             String username = "asd";
-            String password = "Mypassword1@";
-            String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
 
@@ -103,8 +103,8 @@ public class ReadDailyRecordSql {
     public DailyRecord getDailyRecordbyId(int id) {
         try {
             String username = "asd";
-            String password = "Mypassword1@";
-            String connectionUrl = "jdbc:mysql://103.149.46.76:3306/demodb";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
 

@@ -12,7 +12,7 @@ public class UpdateTestBookingSql {
         try {
             String username = "asd";
             String password = "ASDpassword";
-            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             String sql = "Update TestBooking SET fname = '" + tb.getFname() + "',lname = '" + tb.getLname() + "',strnum = '" + tb.getStrnum() + "',str = '" + tb.getStr() + "',suburb='" + tb.getSuburb() + "',email='" + tb.getEmail() + "',phone='" + tb.getPhone() + "',test_date='" + tb.getDate() + "',b_status='" + tb.getStatus() + "',result='" + tb.getResult() + "' Where booking_id =" + tb.getId() + ";";
             Statement stmt = conn.createStatement();

@@ -13,7 +13,7 @@ public class UpdateDailyRecordSql {
         try {
             String username = "asd";
             String password = "ASDpassword";
-            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com/CovidMap";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
             Statement stmt = conn.createStatement();
             String sql = "Update DailyCOVIDRecord SET new_case = "+dr.getNewCase()+",deaths="+dr.getDeaths()+",cured_case="+dr.getCuredCase()+",severe_case="+dr.getSevere_case()+",total_case="+dr.getTotal_case()+",publish_date='"+dr.getPublishDate()+"' where record_id=+"+dr.getId()+";";
