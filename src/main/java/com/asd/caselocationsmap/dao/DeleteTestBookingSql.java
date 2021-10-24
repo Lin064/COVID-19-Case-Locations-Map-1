@@ -17,4 +17,5 @@ public class DeleteTestBookingSql {
             System.out.println("Error occurred at removeBooking()");
         }
     }
+
 }

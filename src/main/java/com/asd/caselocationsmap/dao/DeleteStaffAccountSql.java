@@ -8,7 +8,6 @@ public class DeleteStaffAccountSql {
             String password = "ASDpassword";
             String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
             Connection conn = DriverManager.getConnection(connectionUrl, username, password);
-
             String sql = "delete from StaffAccount where staffid = '"+id+"'";
             System.out.println("account is found");
             Statement stmt = conn.createStatement();

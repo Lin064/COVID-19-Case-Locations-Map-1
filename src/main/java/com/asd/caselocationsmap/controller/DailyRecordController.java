@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 @RestController
 public class DailyRecordController {
+
     @RequestMapping(value = "/postDailyRecord", method = RequestMethod.POST)
     public DailyRecord postRecord(@RequestBody DailyRecord dr, HttpServletResponse resp) throws Exception {
         CreateDailyRecordSql drSql = new CreateDailyRecordSql();
@@ -48,14 +49,24 @@ public class DailyRecordController {
         return dr;
     }
 
+    @RequestMapping(value = "/updateDailyRecordbyEmail", method = RequestMethod.POST)
+    public DailyRecord updateDailyRecordByEmail(@RequestBody DailyRecord dr, HttpServletResponse resp){
+        UpdateDailyRecordSql urs = new UpdateDailyRecordSql();
+        urs.updateDailyRecordbyEmail(dr);
+        return dr;
+    }
+
     @RequestMapping(value = "/deleteDailyRecord", method = RequestMethod.POST)
     public DailyRecord deleteDailyRecord(@RequestBody DailyRecord dr, HttpServletResponse resp){
         DeleteDailyRecordSql ddrs = new DeleteDailyRecordSql();
         ddrs.removeDailyRecord(dr);
         return dr;
     }
-
-
-
+    @RequestMapping(value = "/deleteDailyRecordbyEmail", method = RequestMethod.POST)
+    public DailyRecord deleteDailyRecordbyEmail(@RequestBody DailyRecord dr, HttpServletResponse resp){
+        DeleteDailyRecordSql ddrs = new DeleteDailyRecordSql();
+        ddrs.removeDailyRecordByEmail(dr);
+        return dr;
+    }
 
 }

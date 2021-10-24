@@ -24,4 +24,20 @@ public class UpdateDailyRecordSql {
             System.out.println(e);
         }
     }
+
+    public void updateDailyRecordbyEmail(DailyRecord dr) {
+        try {
+            String username = "asd";
+            String password = "ASDpassword";
+            String connectionUrl = "jdbc:mysql://aa1k7pic2tpxd6q.cn9vqfnivxwa.us-east-2.rds.amazonaws.com:3306/CovidMap";
+            Connection conn = DriverManager.getConnection(connectionUrl, username, password);
+            Statement stmt = conn.createStatement();
+            String sql = "Update DailyCOVIDRecord SET new_case = "+dr.getNewCase()+",deaths="+dr.getDeaths()+",cured_case="+dr.getCuredCase()+",severe_case="+dr.getSevere_case()+",total_case="+dr.getTotal_case()+" where publish_date='"+dr.getPublishDate()+"';";
+            stmt.executeUpdate(sql);
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Error occurred at updateDailyRecord()");
+            System.out.println(e);
+        }
+    }
 }
