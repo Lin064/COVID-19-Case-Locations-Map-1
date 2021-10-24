@@ -15,7 +15,7 @@ public class DailyRecordController {
     }
 
     @RequestMapping(value = "/getDailyRecordByDate", method = RequestMethod.POST)
-    public DailyRecord getRecordByDate(@RequestBody DailyRecord d, HttpServletResponse resp){
+    public DailyRecord getRecordByDate(@RequestBody DailyRecord d){
         ReadDailyRecordSql drSql = new ReadDailyRecordSql();
         DailyRecord dr = drSql.getDailyRecordbyDate(d.getPublishDate());
         return dr;

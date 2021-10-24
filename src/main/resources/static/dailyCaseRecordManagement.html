@@ -125,77 +125,68 @@
 </html>
 <script>
     function update(obj){
-        var trId = "tr"+obj;
-        console.log(trId);
-        var tr = document.getElementById(trId);
-        tr.innerHTML = document.createElement('tr').innerHTML;
-        var td1 = document.createElement('td');
-        var td2 = document.createElement('td');
-        var td3 = document.createElement('td');
-        var td4 = document.createElement('td');
-        var td5 = document.createElement('td');
-        var td6 = document.createElement('td');
-        var td7 = document.createElement('td');
-        var td8 = document.createElement('td');
-        td1.innerHTML = "<input type=\"date\" id=\"date\">";
-        td2.innerHTML = "<input type=\"number\" id=\"newCase\" placeholder=\'Enter  number\'>";
-        td3.innerHTML = "<input type=\"number\" id=\"curedCase\" placeholder=\'Enter number\'>";
-        td4.innerHTML = "<input type=\"number\" id=\"severeCase\" placeholder=\'Enter  number\'>";
-        td5.innerHTML = "<input type=\"number\" id=\"deaths\" placeholder=\'Enter  number\'>";
-        td6.innerHTML = "<input type=\"number\" id=\"totalCase\" placeholder=\'Enter  number\'>";
-        td7.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick=\'updateSubmit("+obj+")\'>Confirm</button>";
-        td8.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick='reset()'>Reset</button>";
-        tr.append(td1);tr.append(td2);tr.append(td3);tr.append(td4);tr.append(td5);tr.append(td6);tr.append(td7);
-        tr.append(td8);
+        if(validation2()) {
+            var trId = "tr" + obj;
+            console.log(trId);
+            var tr = document.getElementById(trId);
+            tr.innerHTML = document.createElement('tr').innerHTML;
+            var td1 = document.createElement('td');
+            var td2 = document.createElement('td');
+            var td3 = document.createElement('td');
+            var td4 = document.createElement('td');
+            var td5 = document.createElement('td');
+            var td6 = document.createElement('td');
+            var td7 = document.createElement('td');
+            var td8 = document.createElement('td');
+            td1.innerHTML = "<input type=\"date\" id=\"date\">";
+            td2.innerHTML = "<input type=\"number\" id=\"newCase\" placeholder=\'Number\'>";
+            td3.innerHTML = "<input type=\"number\" id=\"curedCase\" placeholder=\'Number\'>";
+            td4.innerHTML = "<input type=\"number\" id=\"severeCase\" placeholder=\'Number\'>";
+            td5.innerHTML = "<input type=\"number\" id=\"deaths\" placeholder=\'Number\'>";
+            td6.innerHTML = "<input type=\"number\" id=\"totalCase\" placeholder=\'Number\'>";
+            td7.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick=\'updateSubmit(" + obj + ")\'>Confirm</button>";
+            td8.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick='reset()'>Reset</button>";
+            tr.append(td1);
+            tr.append(td2);
+            tr.append(td3);
+            tr.append(td4);
+            tr.append(td5);
+            tr.append(td6);
+            tr.append(td7);
+            tr.append(td8);
+        }// end of validation if
     }
 
-    function existData(date){
-        console.log(date);
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: '/getDailyRecordByDate',
-            contentType: "application/json",
-            data: JSON.stringify({
-                "publishDate": date,
-            }),
-            success: function (result) {
-                if(result.id <= 0){
-                    return false;
-                } else{
-                    return true;
-                }
-            }
-            })
-        return true;
-    }
+
     function updateSubmit(obj){
-        var date = document.getElementById('date');
-        var newCase = document.getElementById('newCase');
-        var curedCase = document.getElementById('curedCase');
-        var severeCase = document.getElementById('severeCase');
-        var deaths = document.getElementById('deaths');
-        var totalCase = document.getElementById('totalCase');
-           $.ajax({
-               type: "POST",
-               dataType: "json",
-               url: '/updateDailyRecord',
-               contentType: "application/json",
-               data: JSON.stringify({
-                   "id": obj,
-                   "newCase": newCase.value,
-                   "deaths": deaths.value,
-                   "curedCase": curedCase.value,
-                   "severe_case": severeCase.value,
-                   "total_case": totalCase.value,
-                   "publishDate": date.value
-               }),
-               success: function (result) {
-                   console.log(result);
-                   alert("You update dailyRecord Successfully");
-                   window.location.href = "dailyCaseRecordManagement.html";
-               }
-           }); // end of ajax;
+        if(validation()) {
+            var date = document.getElementById('date');
+            var newCase = document.getElementById('newCase');
+            var curedCase = document.getElementById('curedCase');
+            var severeCase = document.getElementById('severeCase');
+            var deaths = document.getElementById('deaths');
+            var totalCase = document.getElementById('totalCase');
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/updateDailyRecord',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "id": obj,
+                    "newCase": newCase.value,
+                    "deaths": deaths.value,
+                    "curedCase": curedCase.value,
+                    "severe_case": severeCase.value,
+                    "total_case": totalCase.value,
+                    "publishDate": date.value
+                }),
+                success: function (result) {
+                    console.log(result);
+                    alert("You update dailyRecord Successfully");
+                    window.location.href = "dailyCaseRecordManagement.html";
+                }
+            }); // end of ajax;
+        }// end of validation
     }
     function removeDailyRecord(obj){
         console.log(obj);
@@ -216,69 +207,83 @@
         }); // end of ajax;
     }
    function addRecord(){
-       var table = document.getElementById('kt_table_users');
-       if( document.getElementById('addRow') == null) {
-           var tr = document.createElement('tr');
-           tr.id = "addRow";
-           var td1 = document.createElement('td');
-           var td2 = document.createElement('td');
-           var td3 = document.createElement('td');
-           var td4 = document.createElement('td');
-           var td5 = document.createElement('td');
-           var td6 = document.createElement('td');
-           var td7 = document.createElement('td');
-           var td8 = document.createElement('td');
-           td1.innerHTML = "<input type=\"date\" id=\"date\">";
-           td2.innerHTML = "<input type=\"number\" id=\"newCase\" placeholder=\'Enter number\'> ";
-           td3.innerHTML = "<input type=\"number\" id=\"curedCase\" placeholder=\'Enter number\'> ";
-           td4.innerHTML = "<input type=\"number\" id=\"severeCase\" placeholder=\'Enter number\'>";
-           td5.innerHTML = "<input type=\"number\" id=\"deaths\" placeholder=\'Enter number\'> ";
-           td6.innerHTML = "<input type=\"number\" id=\"totalCase\" placeholder=\'Enter number\'>";
-           td7.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick='submitRecord()'>Confirm</button>";
-           td8.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick='reset()'>Reset</button>";
-           table.append(tr);
-           tr.append(td1);
-           tr.append(td2);
-           tr.append(td3);
-           tr.append(td4);
-           tr.append(td5);
-           tr.append(td6);
-           tr.append(td7);
-           tr.append(td8);
-       }
+       if(validation2()) {
+           var table = document.getElementById('kt_table_users');
+           if (document.getElementById('addRow') == null) {
+               var tr = document.createElement('tr');
+               tr.id = "addRow";
+               var td1 = document.createElement('td');
+               var td2 = document.createElement('td');
+               var td3 = document.createElement('td');
+               var td4 = document.createElement('td');
+               var td5 = document.createElement('td');
+               var td6 = document.createElement('td');
+               var td7 = document.createElement('td');
+               var td8 = document.createElement('td');
+               td1.innerHTML = "<input type=\"date\" id=\"date\">";
+               td2.innerHTML = "<input type=\"number\" id=\"newCase\" placeholder=\'Number\'> ";
+               td3.innerHTML = "<input type=\"number\" id=\"curedCase\" placeholder=\'Number\'> ";
+               td4.innerHTML = "<input type=\"number\" id=\"severeCase\" placeholder=\'Number\'>";
+               td5.innerHTML = "<input type=\"number\" id=\"deaths\" placeholder=\'Number\'> ";
+               td6.innerHTML = "<input type=\"number\" id=\"totalCase\" placeholder=\'Number\'>";
+               td7.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick='submitRecord()'>Confirm</button>";
+               td8.innerHTML = "<button class=\"btn btn-light btn-active-light-primary btn-sm\" onclick='reset()'>Reset</button>";
+               table.append(tr);
+               tr.append(td1);
+               tr.append(td2);
+               tr.append(td3);
+               tr.append(td4);
+               tr.append(td5);
+               tr.append(td6);
+               tr.append(td7);
+               tr.append(td8);
+           }
+       }// end of validation
    }
    function submitRecord(){
-       var date = document.getElementById('date');
-       var newCase = document.getElementById('newCase');
-       var curedCase = document.getElementById('curedCase');
-       var severeCase = document.getElementById('severeCase');
-       var deaths = document.getElementById('deaths');
-       var totalCase = document.getElementById('totalCase');
-       if(!existData(date.value)) {
+       if(validation()) {
+           var date = document.getElementById('date');
+           var newCase = document.getElementById('newCase');
+           var curedCase = document.getElementById('curedCase');
+           var severeCase = document.getElementById('severeCase');
+           var deaths = document.getElementById('deaths');
+           var totalCase = document.getElementById('totalCase');
            $.ajax({
                type: "POST",
                dataType: "json",
-               url: '/postDailyRecord',
+               url: '/getDailyRecordByDate',
                contentType: "application/json",
                data: JSON.stringify({
-                   "newCase": newCase.value,
-                   "deaths": deaths.value,
-                   "curedCase": curedCase.value,
-                   "severe_case": severeCase.value,
-                   "total_case": totalCase.value,
                    "publishDate": date.value
                }),
                success: function (result) {
-                   console.log(result);
-                   alert("You Submit dailyRecord Successfully");
-                   window.location.href = "dailyCaseRecordManagement.html";
+                   if (result.id == 0) {
+                       $.ajax({
+                           type: "POST",
+                           dataType: "json",
+                           url: '/postDailyRecord',
+                           contentType: "application/json",
+                           data: JSON.stringify({
+                               "newCase": newCase.value,
+                               "deaths": deaths.value,
+                               "curedCase": curedCase.value,
+                               "severe_case": severeCase.value,
+                               "total_case": totalCase.value,
+                               "publishDate": date.value
+                           }),
+                           success: function (result) {
+                               console.log(result);
+                               alert("You Submit dailyRecord Successfully");
+                               window.location.href = "dailyCaseRecordManagement.html";
+                           }
+                       }); // end of ajax;
+                   } else {
+                       alert("The daily Record has already in this day");
+                   }
                }
-           }); // end of ajax;
-       } else{
-           alert("The data of this date is already exist");
-       }
+           });
+       }// end of validation if
    }
-
    function reset(){
        var date = document.getElementById('date');
        var newCase = document.getElementById('newCase');
@@ -336,5 +341,38 @@
                }
            }
        }); // end of ajax;
+   }
+
+   function  validation2(){
+        // update, add only one operation can be select
+       var flag = true;
+       var date = document.getElementById('date');
+       if(date!=null){
+           alert("Please finish the current operation First");
+           flag = false;
+       }
+       return flag
+   }
+
+   function validation(){
+       flag = true
+       var date = document.getElementById('date');
+       var newCase = document.getElementById('newCase');
+       var curedCase = document.getElementById('curedCase');
+       var severeCase = document.getElementById('severeCase');
+       var deaths = document.getElementById('deaths');
+       var totalCase = document.getElementById('totalCase');
+
+
+
+       if(date.value =="" || newCase.value =="" || curedCase==""||severeCase.value=="" ||deaths.value==""||totalCase.value ==""){
+           alert("You should fill all of  information");
+           flag = false;
+       }
+       if(newCase.value < 0 || curedCase < 0 || severeCase.value < 0 || deaths.value < 0 || totalCase.value < 0 ){
+           alert("Every case number can not be negative");
+           flag = false;
+       }
+       return flag;
    }
 </script>
