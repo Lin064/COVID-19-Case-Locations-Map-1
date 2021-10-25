@@ -1,0 +1,145 @@
+<html xml:lang="en" lang="en">
+
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<title>Info Management Page</title>
+		<link rel="stylesheet" href="css/960.css" type="text/css" media="screen" charset="utf-8" />
+		<!--<link rel="stylesheet" href="css/fluid.css" type="text/css" media="screen" charset="utf-8" />-->
+		<link rel="stylesheet" href="css/template.css" type="text/css" media="screen" charset="utf-8" />
+		<link rel="stylesheet" href="css/colour.css" type="text/css" media="screen" charset="utf-8" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/info.css" />
+
+	</head>
+
+
+	<body>
+	<h1 id="head">COVID-19 Related-Info Create Page (Manager Side)</h1>
+	<!--Navigation Bar-->
+	<ul id="navigation">
+		<li><a href="#"><span class="active">Create New</span></a></li>
+		<li><a href="./info_update.html">Update Info</a></li>
+		<li><a href="./info.html">User View</a></li>
+	</ul>
+
+			<div id="content" class="container_16 clearfix">
+
+				<div>
+					<div class="grid_16">
+						<h2>Upload Covid-19 information</h2>
+					</div>
+
+					<!--This part is to receive the author information -->
+					<div class="grid_5">
+						<p>
+							<label>Source <small>Author or Source website</small></label>
+							<input type="text" name="title" id="info_author"/>
+						</p>
+					</div>
+
+					<!--This part is to display the source of the message-->
+					<div class="grid_5">
+						<p>
+							<label>Date </label>
+							<input type="date" name="title" id="info_date"/>
+						</p>
+						
+					</div>
+					<!--This part is for setting the message type-->
+					<div class="grid_6">
+						<p>
+							<label>Info Category</label>
+							<select id="info_type">
+								<option>COVID-19 News</option>
+								<option>The Government Statements</option>
+								<option>COVID-19 Support Package</option>
+							</select>
+						</p>
+					</div>
+
+					<div class="grid_16">
+						<p>
+							<label>Title <small>Info Title</small></label>
+							<input type="text" name="title" id="info_title" />
+						</p>
+
+					</div>
+
+
+					<div class="grid_16">
+						<p>
+							<label>Description <small>Will be displayed in search engine results.</small></label>
+							<textarea class="big" id="info_description"></textarea>
+						</p>
+					</div>
+
+					<div class="grid_16">
+						<p>
+							<label>Context <small>Info context</small></label>
+							<textarea rows="20" cols="20" class="big" id="info_context"></textarea>
+						</p>
+						<p class="submit">
+							<input type="reset" value="Reset" />
+							<button class="button1" onclick="submitInfo()">Confirm</button>
+						</p>
+					</div>
+				</div>
+			</div>
+
+
+		<div id="foot">
+					<p>COVID-19 Cases Location Map </p>
+		</div>
+	</body>
+
+	<script>
+		function changeTextFormat(text)
+		{
+			var des = text.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, ' ').replace(/'/g, '&acute').replace(/"/g, '&quot');
+			return des;
+		}
+
+		function submitInfo()
+		{
+			var info_title = document.getElementById("info_title").value;
+			var info_date = document.getElementById("info_date").value;
+			var info_type = document.getElementById("info_type").value;
+			var info_author = document.getElementById("info_author").value;
+			var info_description = document.getElementById("info_description").value;
+			var info_context = document.getElementById("info_context").value;
+
+			if(info_title=="" || info_date=="" || info_author=="" || info_context =="")
+			{
+				alert("Please input all the information!");
+			}
+			else
+			{
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: '/info2',
+					contentType: "application/json",
+					data:JSON.stringify({
+						"title": changeTextFormat(info_title),
+						"date": info_date,
+						"type": info_type,
+						"author": info_author,
+						"description": changeTextFormat(info_description),
+						"context": changeTextFormat(info_context),
+						"status": true
+					}),
+					success: function()
+					{
+						window.location.href='./info_update.html';
+					}
+				});
+			}
+
+
+		}
+
+
+	</script>
+
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Booking Management</title>
+    <link href="./css/bookingManagestyle.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function getList() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/testBooking1',
+                contentType: "application/json",
+                success: function (result) {
+                    // json string
+                    iterateResult(result);
+                }
+            });
+        }
+        function getToSearch(){
+            var select= document.getElementById('method');
+            var option = select.options[select.selectedIndex].value;
+            var content = document.getElementById('content').value;
+            if (option == "email"){
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: '/findBookingbyEmail',
+                    contentType: "application/json",
+                    data: content,
+                    success: function (result) {
+                        iterateResult(result);
+                    }
+                });
+            }else if(option == "suburb"){
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: '/findBookingbySuburb',
+                    contentType: "application/json",
+                    data: content,
+                    success: function (result) {
+                        iterateResult(result);
+                    }
+                });
+            }
+        }
+    </script>
+<body onload=checkManagerLogin()>
+ <ul id="navigation" >
+            <li><span class="active">Overview</span></li>
+            <li><a href="index-page-2.html" target="_self">Home</a></li>
+ </ul>
+     <div class="Content-Main">
+      <h1>Test Booking Management</h1>
+         <div id="searchArea">
+             <label for="method" style="color:black"> Search Method: </label>
+             <select name="method" id = "method">
+                 <option selected id="byEmail" value="email"> By Email </option>
+                 <option id = "bySuburb" value="suburb"> By Suburb  </option>
+             </select> &nbsp;
+             <input type="text" id = "content" placeholder="Enter the search key">&nbsp;
+             <input type="button" value="Search" onclick="getToSearch()"><br>
+
+         </div> <br>
+    <table id="table_info">
+        <tr id="titleRow">
+            <th>No.</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Test Date</th>
+            <th> Result</th>
+            <th> Status</th>
+            <th> &nbsp Update &nbsp  </th>
+            <th> &nbsp Delete &nbsp  </th>
+        </tr>
+    </table>
+    </div>
+</body>
+
+    <script>
+        function deleteBooking(id){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/removeBooking',
+                contentType: "application/json",
+                data: id,
+                success: function (result) {
+                    window.location.href = "./bookingManage.html"
+                }
+            });
+        }
+
+        function editBooking(id){
+            var newHref = "./bookingUpdate.html?id=" + id
+            window.location.href = newHref;
+        }
+
+        function iterateResult(result){
+            var table = document.getElementById('table_info');
+            var title = document.getElementById('titleRow');
+            var newTable = document.createElement('table');
+            newTable.append(title);
+            table.innerHTML = newTable.innerHTML;
+            var objArray = eval(result);
+            console.log(objArray);
+            for( var i = 0; i < objArray.length;i++){
+                var row = document.createElement('tr');
+                table.append(row);
+                var td1  = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+                var td4 = document.createElement('td');
+                var td5 = document.createElement('td');
+                var td6 = document.createElement('td');
+                var td7 = document.createElement('td');
+                var td8 = document.createElement('td');
+                row.append(td1);
+                row.append(td2);
+                row.append(td3);
+                row.append(td4);
+                row.append(td5);
+                row.append(td6);
+                row.append(td7);
+                row.append(td8);
+                //var str1 = "<a href=\"bookingUpdate.html" + "?id=" + objArray[i].id + "\"> Update </a>"
+                var str1 = "<input type=\"button\"  value=\"Update\" onClick=\"editBooking('"+objArray[i].id +"')\">"
+                var str2 = "<input type=\"button\"  value=\"Delete\" onClick=\"deleteBooking('"+objArray[i].id +"')\">"
+                td1.innerHTML = objArray[i].id;
+                td2.innerHTML = objArray[i].email;
+                td3.innerHTML  = objArray[i].strnum +" "+ objArray[i].str +" "+ objArray[i].suburb;
+                td4.innerHTML  = objArray[i].date;
+                td5.innerHTML  = objArray[i].result;
+                td6.innerHTML = objArray[i].status;
+                td7.innerHTML = str1;
+                td8.innerHTML = str2;
+            }
+
+        }
+
+        function  checkManagerLogin(){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/checkManagerLogin',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result==="") {
+                        window.location.href = "403.html";
+                    } else{
+                        getList()
+                    }
+                }
+            });
+        }
+    </script>

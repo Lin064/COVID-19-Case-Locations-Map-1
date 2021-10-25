@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="root">
+    <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+        <el-menu-item index="1">Map</el-menu-item>
+        <el-menu-item index="2">Living in NSW</el-menu-item>
+        <el-menu-item index="3">Working and business</el-menu-item>
+        <el-menu-item index="4">What's happening</el-menu-item>
+    </el-menu>
+
+    <div class="container">
+        <div class="banner_content">
+            <div class="large">COVID-19 case locations map</div>
+            <div class="mid">Search the case locations list by postcode, suburb or town to find out if you have visited a location in regional NSW or Greater Sydney with a confirmed COVID-19 case in the last 14 days.</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <label>
+            Search by location<br>
+            <gmap-autocomplete
+                    placeholder="Enter postcode or suburb"
+                    @place_changed="setPlace" style="height: 33px;">
+            </gmap-autocomplete>
+            <el-button @click="usePlace" type="primary">Search</el-button>
+        </label>
+        <br />
+    </div>
+
+    <div class="map-key">
+        <div class="container">
+            <span style="font-weight: 600;">Key</span>
+            <span class="key_item"><img src="/images/m1.png">Multiple case locations</span>
+            <span class="key_item"><img src="/images/map-marker-icon.png">Case location</span>
+        </div>
+    </div>
+
+
+    <div class="flex-container">
+        <div class="info-container" v-html="detailedInfo">
+        </div>
+        <div>
+            <Gmap-Map :center="center" :zoom="changingZoom" :options="{scrollwheel: false}" class="map-container">
+                <gmap-cluster>
+                    <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
+                    </gmap-info-window>
+                    <Gmap-Marker
+                            v-for="(marker, index) in markers"
+                            :key="index"
+                            :position="marker.position"
+                            :clickable="true"
+                            @click="toggleInfoWindow(marker, index)"
+                    ></Gmap-Marker>
+                </gmap-cluster>
+            </Gmap-Map>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="banner_content">
+            If there are places associated with a confirmed COVID-19 case in the past 14 days, they will be listed on the map above. Locations are generally removed 14 days after the last known date that a confirmed case was associated with the location.
+
+            In Greater Sydney (including the Blue Mountains, Central Coast, Wollongong and Shellharbour), the exposure locations map lists close contact venues that are assessed as a public health risk. Outside of Greater Sydney, the exposure locations map lists close and casual contact venues. Read more about the map.
+
+            Case location times are listed in the local time zone. For example, venues in Broken Hill are listed in Central Standard Time (CST).
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<link rel="stylesheet" href="css/map.css">
+<link rel="stylesheet" href="css/case_locations_map.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gmap-vue@1.5.0/dist/gmap-vue.min.js"></script>
+
+<script>
+    Vue.use(GmapVue, {
+        load: {
+            key: 'AIzaSyAuklIUwSVc1sMkwzx-NQ5cJMEH6RGmDqY',
+            libraries: 'places'
+        },
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        Vue.component('gmap-cluster', GmapVue.Cluster);
+        new Vue({
+            el: '#root',
+            data: {
+                activeIndex: '1',
+                changingZoom: 15,
+                detailedInfo: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Aldi Albion Park Rail</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">10 Ash Avenue, Albion Park Rail</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 30 August 2021, 12:30pm to 1:00pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>',
+                infoWindowPos: null,
+                infoWinOpen: false,
+                currentMidx: null,
+                infoOptions: {
+                    content: '',
+                    //optional: offset infowindow so it visually sits nicely on top of our marker
+                    pixelOffset: {
+                        width: 0,
+                        height: -35
+                    }
+                },
+                center: {
+                    lat: -33.872780,
+                    lng: 151.206166
+                },
+                markers: [{
+                    position: {
+                        lat: -33.909087,
+                        lng: 151.206700
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Coles Warrawong</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">Warrawong Shopping Center, Corner of Northcliffe Drive and King Street, Warrawong</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Friday 20 August 2021, 11:30am to 11:50am</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Sunday 22 August 2021, 12pm (noon) to 12:20pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Wednesday 1 September 2021, 8:30pm to 9pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>\n'
+                }, {
+                    position: {
+                        lat: -33.963933,
+                        lng: 151.098203
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">IGA West Dubbo</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">38-40 Victoria Street, Dubbo</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Wednesday 11 August 2021, 11am to 11:30am</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 16 August 2021, 10:30am to 10:45am</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Friday 20 August 2021, 11am to 11:20am</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Thursday 26 August 2021, 2:50pm to 3:20pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Friday 27 August 2021, 12:50pm to 1pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Sunday 29 August 2021, 5:20pm to 5:30pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Tuesday 31 August 2021, 5:50pm to 5:55pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.960107,
+                        lng: 151.103578
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Credit Union Orange</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">288 Summer Street, Orange</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Tuesday 31 August 2021, 10:00am to 1:00pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.960549,
+                        lng: 151.116456
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Richmond Inn Hotel Motel</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">90 March Street, Richmond</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 30 August 2021, 12:35pm to 1:35pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Tuesday 31 August 2021, 12:55pm to 1:05pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.971936,
+                        lng: 151.102890
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Woolworths Shellharbour</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">New Lake Entrance Road, Shellharbour</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Saturday 28 August 2021, 2:00pm to 2:05pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Tuesday 31 August 2021, 6:00pm to 6:15pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.876056,
+                        lng: 151.103908
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Woolworths Warilla</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">Warilla Grove Shopping Centre, 29-30 Shellharbour Road, Warilla</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Friday 27 August 2021, 1:45pm to 2:00pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Sunday 29 August 2021, 9:15am to 9:45am</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Tuesday 31 August 2021, 2:15pm to 3:00pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.873300,
+                        lng: 151.210224
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Aldi Albion Park Rail</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">10 Ash Avenue, Albion Park Rail</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 30 August 2021, 12:30pm to 1:00pm</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                },  {
+                    position: {
+                        lat: -33.873776,
+                        lng: 151.098587
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Dubbo Regional Council Wise Park</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">Mitchell Highway, Geurie</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 30 August 2021, 8:45am to 8:50am</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.881616,
+                        lng: 151.205826
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Geurie Pit Stop Garage</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">63 Buckenbah Street, Geurie</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 30 August 2021, 8:50am to 8:55am</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }, {
+                    position: {
+                        lat: -33.879513,
+                        lng: 151.178151
+                    },
+                    infoText: '<strong>Case date</strong><br>Friday 13 August 2021',
+                    detailedInfoText: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Shell Coles Express Wyalong</div><div class="location-detail-item-addr-container"><span class="location-detail-item-addr-label location-detail-item-sub-header">Case Location: </span><span class="location-detail-item-text location-detail-item-addr-text">Mid-Western Highway and Nicholson Lane, Wyalong</span></div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at the following time[s]:</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Thursday 26 August 2021, 7pm to 7:45pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Friday 27 August 2021, 11:30pm to 11:55pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Saturday 28 August 2021, 6:15pm to 6:20pm</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Saturday 28 August 2021, 12am (midnight) to 12:15am</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Sunday 29 August 2021, 11:45pm to 12am (midnight)</p><p class="location-detail-item-advice-item-time-text location-detail-item-text">Monday 30 August 2021, 12am (midnight) to 12:15am</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p></div></div></div>'
+                }],
+                place: null,
+            },
+            methods: {
+                setDescription(description) {
+                    this.description = description;
+                },
+                setPlace(place) {
+                    this.place = place
+                },
+                usePlace(place) {
+                    if (this.place) {
+                        this.center.lat = this.place.geometry.location.lat(),
+                        this.center.lng = this.place.geometry.location.lng(),
+                        this.place = null;
+                    }
+                },
+                toggleInfoWindow: function(marker, idx) {
+                    this.infoWindowPos = marker.position;
+                    this.infoOptions.content = marker.infoText;
+                    this.detailedInfo=marker.detailedInfoText;
+                    //check if its the same marker that was selected if yes toggle
+                    if (this.currentMidx == idx) {
+                        this.infoWinOpen = !this.infoWinOpen;
+                    }
+
+                    //if different marker set infowindow to open and reset current marker index
+                    else {
+                        this.infoWinOpen = true;
+                        this.currentMidx = idx;
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

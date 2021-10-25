@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+    <link href="css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <style>
+        .fw-bold {
+            font-weight: 600!important;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body id="kt_body" style="background-image: url('images/header-bg.jpg')" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled" onload="getLatestRecord()">
+    <div class="d-flex flex-column flex-root">
+        <div class="page d-flex flex-row flex-column-fluid">
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                <!--Top-->
+                <div id="kt_header" class="header align-items-stretch" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+                    <div class="container-xxl d-flex align-items-center">
+                        <div class="header-logo me-5 me-md-10 flex-grow-1 flex-lg-grow-0">
+                            <a href="dailyCaseRecord.html">
+                                <img alt="Logo" src="images/maps-ico.png" class="logo-default h-25px" />
+                            </a>
+                        </div>
+
+                        <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
+                            <div class="d-flex align-items-stretch" id="kt_header_nav">
+                                <div class="header-menu align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
+                                    <div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
+                                        <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+                                            <a class="menu-link py-3" href="index-page-1.html">
+                                                <span class="menu-link py-3">
+                                                    <span class="menu-title">Home</span>
+                                                </span>
+                                            </a>
+                                        </div>
+
+                                        <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+                                            <a class="menu-link py-3" href="testBooking.html">
+                                                <span class="menu-link py-3">
+                                                    <span class="menu-title">COVID-19 Test Booking</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--TopMid-->
+                <div class="toolbar py-5 py-lg-15" id="kt_toolbar">
+                    <div id="kt_toolbar_container" class="container-xxl d-flex flex-stack flex-wrap">
+                        <div class="page-title d-flex flex-column me-3">
+                            <h1 class="d-flex text-white fw-bolder my-1 fs-3">Case Record</h1>
+                        </div>
+
+                        <div class="d-flex align-items-center py-3 py-md-1">
+                            <input class="btn btn-bg-white btn-active-color-primary" style="margin-right: 8px;" type="Date" name="date" id="date">
+                            <input class="btn btn-bg-white btn-active-color-primary" type="button" onclick="searchBydate()" value="Review">
+                        </div>
+                    </div>
+                </div>
+
+                <!--Mid-->
+                <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
+                    <div class="content flex-row-fluid" id="kt_content">
+                        <div class="card">
+                            <div class="card-body pt-0">
+                                <div class="card-body pt-0">
+                                    <!--table-->
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                                        <thead>
+                                        <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Date</th>
+                                            <th class="min-w-125px">New Case</th>
+                                            <th class="min-w-125px">Cured Case</th>
+                                            <th class="min-w-125px">Severe Case</th>
+                                            <th class="min-w-125px">deaths</th>
+                                            <th class="min-w-125px">Total Case</th>
+                                        </tr>
+                                        </thead>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--bottom-->
+                <div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
+                    <div class="container-xxl d-flex flex-column flex-md-row align-items-center justify-content-between">
+                        <div class="text-dark order-2 order-md-1">
+                            <span class="text-muted fw-bold me-1">2021</span>
+                            <a href="map.html" target="_blank" class="text-gray-800 text-hover-primary">COVID-19 Map</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+        function getLatestRecord() {
+            var table = document.getElementById('kt_table_users');
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/getLatestDailyRecord',
+                contentType: "application/json",
+                success: function (result) {
+                    console.log(result);
+                    if(result.id <= 0){
+                        alert("There are no data in the Application!");
+                        window.location.href = "dailyCaseRecord.html";
+                    } else{
+                        // data exist
+                        var newtr = document.createElement('tr');
+                        table.append(newtr);
+                        var td1 = document.createElement('td');
+                        var td2 = document.createElement('td');
+                        var td3 = document.createElement('td');
+                        var td4 = document.createElement('td');
+                        var td5 = document.createElement('td');
+                        var td6 = document.createElement('td');
+                        td1.innerText = result.publishDate;
+                        td2.innerText = result.newCase;
+                        td3.innerText = result.curedCase;
+                        td4.innerText = result.severe_case;
+                        td5.innerText = result.deaths;
+                        td6.innerText = result.total_case;
+                        newtr.append(td1);
+                        newtr.append(td2);
+                        newtr.append(td3);
+                        newtr.append(td4);
+                        newtr.append(td5);
+                        newtr.append(td6);
+                    }
+
+                }
+            }); // end of ajax;
+        }//end of function
+
+        function searchBydate(){
+            var table = document.getElementById('kt_table_users');
+            table.innerHTML = document.createElement('table').innerHTML;
+            var date = document.getElementById('date').value;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/getDailyRecordByDate',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "publishDate":date
+                }),
+                success: function (result) {
+                    console.log(result);
+                    if(result.id <= 0){
+                        alert("There are no data in this date!");
+                        window.location.href = "dailyCaseRecord.html";
+                    } else{
+                        // data exist
+                        var newtr = document.createElement('tr');
+                        table.append(newtr);
+                        var td1 = document.createElement('td');
+                        var td2 = document.createElement('td');
+                        var td3 = document.createElement('td');
+                        var td4 = document.createElement('td');
+                        var td5 = document.createElement('td');
+                        var td6 = document.createElement('td');
+                        td1.innerText = result.publishDate;
+                        td2.innerText = result.newCase;
+                        td3.innerText = result.curedCase;
+                        td4.innerText = result.severe_case;
+                        td5.innerText = result.deaths;
+                        td6.innerText = result.total_case;
+                        newtr.append(td1);
+                        newtr.append(td2);
+                        newtr.append(td3);
+                        newtr.append(td4);
+                        newtr.append(td5);
+                        newtr.append(td6);
+                    }
+                }
+            }); // end of ajax;
+        }
+    </script>
+</html>
