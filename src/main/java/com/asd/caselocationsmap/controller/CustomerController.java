@@ -11,8 +11,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
+
 @RestController
 public class CustomerController {
     @RequestMapping(value ="/createCustomer", method = RequestMethod.POST)
@@ -23,13 +23,34 @@ public class CustomerController {
         return flag;
     }
 
+    @RequestMapping(value ="/createCustomer1", method = RequestMethod.POST)
+    public CustomerAccount createCustomers(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception{
+        //Use LocalDate to clear the hour, minute, and second data in caseDate
+        CreateCustomerAccountSql casql = new CreateCustomerAccountSql();
+        casql.createCustomerAccount(ca);
+        return ca;
+    }
+
+    @RequestMapping(value="/readAccount", method = RequestMethod.POST)
+    public CustomerAccount readAccount(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception {
+        ReadCustomerAccountSql readCustomerAccountSql = new ReadCustomerAccountSql();
+        CustomerAccount cas = readCustomerAccountSql.customerAccount(ca.getEmail());
+        return cas;
+    }
+
+    @RequestMapping(value="/updateAccount", method = RequestMethod.POST)
+    public CustomerAccount updateCustomerAccount(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception{
+        UpdateCustomerAccountSql updateCustomerAccountSql = new UpdateCustomerAccountSql();
+        updateCustomerAccountSql.updateCustomerAccount(ca);
+        return ca;
+    }
+
     @RequestMapping(value ="/verifyCustomer", method = RequestMethod.POST)
         public boolean verifyCustomer(@RequestBody CustomerAccount ca, HttpServletResponse resp, ServletRequest request) throws Exception {
          ReadCustomerAccountSql rca = new ReadCustomerAccountSql();
          boolean flag = rca.verifyAccount(ca);
          HttpServletRequest req = (HttpServletRequest) request;
          HttpSession session = req.getSession();
-
          if(flag){
              session.setAttribute("isCustomer",true);
              session.setAttribute("email",ca.getEmail());
