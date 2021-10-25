@@ -13,9 +13,9 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-        <el-menu-item index="1">Map</el-menu-item>
-        <el-menu-item index="2">Living in NSW</el-menu-item>
-        <el-menu-item index="3">What's happening</el-menu-item>
+        <el-menu-item index="1"><a href="index-page-1.html" style="text-decoration: none">Home</a></el-menu-item>
+        <el-menu-item index="2">Map</el-menu-item>
+        <el-menu-item index="3">Living in NSW</el-menu-item>
     </el-menu>
 
     <div class="container">
@@ -97,7 +97,7 @@
         new Vue({
             el: '#root',
             data: {
-                activeIndex: '1',
+                activeIndex: '2',
                 changingZoom: 15,
                 detailedInfo: '<div class="location-detail-item-wrapper"><div class="location-detail-item-header">Coles Warrawong</div><div class="location-detail-item-advice-container"><div class="location-detail-item-advice-item-wrapper"><p class="location-detail-item-text">If you were at this venue at that time</p><p class="location-detail-item-text">Then you should:</p><p class="location-detail-item-advice-item-alert-text">Get tested immediately. Self-isolate until you get a negative result.</p><p class="location-detail-item-advice-item-advice-text">Anyone who attended this venue is a <a href="https://www.health.nsw.gov.au/Infectious/factsheets/Pages/covid-19-casual-contact.aspx" target="_blank">casual contact</a> and must <a href="https://www.nsw.gov.au/covid-19/how-to-protect-yourself-and-others/clinics" target="_blank">get tested</a> and <a href="https://www.nsw.gov.au/covid-19/what-you-can-and-cant-do-under-rules/self-isolation" target="_blank">self-isolate</a> until they receive a negative result. If your date of exposure at this venue occurred in last 4 days, you must get another test on day 5 from the date of exposure. Wear a mask around others and limit your movements until you get another negative result.  You should continue to monitor for symptoms and if any symptoms occur, get tested again.</p>        <p class="location-detail-item-advice-item-advice-text">NSW Health alerts the public as quickly as possible where there is a venue deemed a public health risk. In Greater Sydney, casual contact venues will no longer be published. Close and casual contact venues in regional NSW will continue to be published. The public will not be alerted to new venues if NSW Health obtain a list of people potentially exposed to the virus through the venue or other records.</p></div></div></div>',
                 infoWindowPos: null,
