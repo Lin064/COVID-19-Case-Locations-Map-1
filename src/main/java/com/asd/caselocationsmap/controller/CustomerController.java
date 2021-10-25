@@ -23,6 +23,14 @@ public class CustomerController {
         return flag;
     }
 
+    @RequestMapping(value ="/createCustomer1", method = RequestMethod.POST)
+    public CustomerAccount createCustomers(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception{
+        //Use LocalDate to clear the hour, minute, and second data in caseDate
+        CreateCustomerAccountSql casql = new CreateCustomerAccountSql();
+        casql.createCustomerAccount(ca);
+        return ca;
+    }
+
     @RequestMapping(value="/readAccount", method = RequestMethod.POST)
     public CustomerAccount readAccount(@RequestBody CustomerAccount ca, HttpServletResponse resp) throws Exception {
         ReadCustomerAccountSql readCustomerAccountSql = new ReadCustomerAccountSql();
