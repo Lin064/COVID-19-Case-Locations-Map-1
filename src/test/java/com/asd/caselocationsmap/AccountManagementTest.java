@@ -41,16 +41,10 @@ public class AccountManagementTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(content);
 
-       String result =  mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
-       if(result!=null){
-           boolean flag= Boolean.valueOf(result);
-           if(!flag){
-               deleteAccount();
-               createStaffAccount();
-           }
-       }
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
+
+
 
         //.andExpect(jsonPath("$.staffId").value(id))
 
