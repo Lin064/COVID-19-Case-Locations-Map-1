@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="css/userAccountInformation.css">
+    <script src="https://kit.fontawesome.com/b1524fc800.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body onload="readAccount()">
+
+    <div class="container text-center">
+        <h1 class="bg-light py-4 text-info"><i class="far fa-id-badge"></i>     My Details</h1>
+    </div>
+
+    <div class="b-flex justify-content-center">
+        <button type="submit" class="btn btn-active-color-dark" id="btn-primary" onclick="goMain()">Back Home</button>
+    </div>
+
+    <div class="container">
+        <form>
+        <table class="table table-striped" id="customeraccount">
+            <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Name</th>
+                <th scope="col">Phone Number</th>
+                <th scope="col">Edit</th>
+            </tr>
+            </thead>
+        </table>
+        </form>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+    function readAccount() {
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            url: "/checkUserLogin",
+            contentType: "application/json",
+            success: function (result) {
+                if(result=="") {
+                    alert("You must login to get details");
+                    window.location.href="403.html"
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        datatype: "json",
+                        url: "/readAccount",
+                        contentType: "application/json",
+                        data: JSON.stringify({"email":result}),
+                        success: function (result) {
+                            console.log(result);
+                            var table = document.getElementById('customeraccount');
+                            var row = document.createElement('tr');
+                            table.append(row);
+                            var td0 = document.createElement('td');
+                            td0.innerHTML = result.email;
+                            row.append(td0);
+                            var td = document.createElement('td');
+                            td.innerHTML = result.name;
+                            row.append(td);
+                            var td1 = document.createElement('td');
+                            td1.innerHTML = result.phone;
+                            row.append(td1);
+                            var td2 = document.createElement('td');
+                            var newTd = "<a class=\"btn btn-warning\" id=\"btn-update\" onclick=\"jump('"+result+"')\">Update</a>";
+                            td2.innerHTML = newTd;
+                            row.append(td2);
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    function jump() {
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            url: "/checkUserLogin",
+            contentType: "application/json",
+            success: function (result) {
+                if(result=="") {
+                    alert("You must login to get details");
+                    window.location.href="403.html"
+                } else {
+                    window.location.href = "./updateUserAccount.html?result"+result;
+                }
+            }
+        });
+    }
+
+    function goMain(){
+        window.location.href = "index-page-3.html";
+    }
+</script>
+
+</body>
+</html>

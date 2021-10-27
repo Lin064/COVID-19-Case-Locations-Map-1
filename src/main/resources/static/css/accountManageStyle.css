@@ -1,0 +1,47 @@
+.col input {
+    margin: .9em 0em;
+}
+
+.d-flex button {
+    height: 30px;
+    weight: 50px;
+    margin: 1.5em .6em;
+    padding: .3em 2.4em;
+}
+
+.b-flex button {
+    position: fixed;
+    top: 100px;
+    right: 100px;
+}
+
+.container {
+    position: center;
+}
+
+.container table{
+    justify-content: center;
+}
+
+.col label{
+    visibility: hidden;
+    position: absolute;
+}
+
+.col.error label{
+    bottom: -15px;
+    left: 15px;
+    color:rgb(235, 53, 53);
+    visibility: visible;
+    position: absolute;
+}
+
+/*table .btnedit{*/
+/*    color: rgb(122, 233, 122);*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*table .btndelete{*/
+/*    color: rgb(243, 96, 96);*/
+/*    cursor: pointer;*/
+/*}*/

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Booking Update</title>
+    <link href="./css/bookingUpdateStyle.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function getBooking()
+        {
+            var content = location.search;
+            var id = content.indexOf('=');
+            var bid = document.getElementById('id');
+            var fname = document.getElementById('fname');
+            var lname = document.getElementById('lname');
+            var strnum = document.getElementById('strnum');
+            var str = document.getElementById('str');
+            var suburb = document.getElementById('suburb');
+            var email = document.getElementById('email');
+            var phone = document.getElementById('phone');
+            var resultOp1 = document.getElementById('option1');
+            var resultOp2 = document.getElementById('option2');
+            var resultOp3 = document.getElementById('option3');
+            var statusOptionA = document.getElementById('optionA');
+            var statusOptionB = document.getElementById('optionB');
+            var statusOptionC = document.getElementById('optionC');
+            var date = document.getElementById('date');
+
+            if (id > -1)
+            {
+                content = content.substring(id + 1);
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/findBooking',
+                data: content,
+                contentType: "application/json",
+                success: function (result) {
+                    var obj = eval(result);
+                    console.log(obj);
+                    bid.value = obj.id;
+                    fname.value = obj.fname;
+                    lname.value = obj.lname;
+                    strnum.value = obj.strnum;
+                    str.value = obj.str;
+                    suburb.value = obj.suburb;
+                    email.value = obj.email;
+                    phone.value = obj.phone;
+                    date.value = obj.date;
+                    if(resultOp1.value==obj.result){resultOp1.check=true;}
+                    else if(resultOp2.value==obj.result){resultOp2.check=true;}
+                    else if(resultOp3.value==obj.result){resultop3.check=true;}
+                    if(statusOptionA.value==obj.status){statusOptionA.check=true;}
+                    else if(statusOptionB.value==obj.status){statusOptionB.check=true;}
+                    else if(statusOptionC.value==obj.status){statusOptionC.check=true;}
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="getBooking()">
+<h1 id="head">Test Booking Update</h1>
+<ul id="navigation">
+
+    <li><span class="active">Overview</span></li>
+    <li><a href="index-page-1.html" target="_self">Home</a></li>
+    <li><a href="testBooking.html" target="_self">TestBooking</a></li>
+    <li><a href="testBookingList.html" target="_self">Histroy</a></li>
+</ul>
+
+<div class="Content-Main">
+    <form  action="" method="post">
+        <br>
+        <h1>Test Booking Update</h1>
+        <span class="text1">you can  cancel the Booking or Update some </span><br><br>
+
+        <label>
+            <span>Booking No: </span>
+            <input type="text" id="id" readonly>
+        </label>
+
+        <label>
+            <span>First Name:</span>
+            <input type="text" id="fname" name="fname" placeholder="Your First Name" >
+        </label>
+
+        <label>
+            <span>Last name:</span>
+            <input type="text" id="lname" name="lname" placeholder="Your Last Name" required >
+        </label>
+
+        <label>
+            <span>Street number</span>
+            <input type="text" id="strnum" name="strnum" placeholder="Street number you live" required >
+        </label>
+
+        <label>
+            <span>Street</span>
+            <input type="text" id="str" name="str" placeholder="The street name you live" required >
+        </label>
+
+        <label>
+            <span>Suburb</span>
+            <input type="text"  id ="suburb" name="suburb" placeholder="Suburb you live" required >
+        </label>
+
+        <label>
+            <span>Your email :</span>
+            <input type="email" id="email" name="email" placeholder="Enter your connect email" required readonly>
+        </label>
+        <label>
+            <span>Your phone:</span>
+            <input type="text" id="phone" name="phone" placeholder="Please enter phone number" required >
+        </label>
+        <label>
+            <span>Test result</span>
+            <select name="testResult" id="resultSelect" disabled>
+                <option id="option1">No published</option>
+                <option id="option2">Negtive</option>
+                <option id="option3">Positive</option>
+            </select>
+        </label>
+        <label>
+            <span>Booking Status</span>
+            <select name="bookingStatus" id="statusSelect" disabled>
+                <option id="optionA">Continue</option>
+                <option id="optionB">Complete</option>
+                <option id="optionC">Cancel</option>
+            </select>
+        </label>
+        <label>
+            <span>Available Date:</span>
+            <input type="date" id="date" name="testDate" required>
+        </label>
+        <br>
+        <label align = "center">
+            <input type="button" class="button" value="Update" onclick="updateBooking()">
+        </label>
+        <h2 align="center" style="color: red" id="feedback"> </h2>
+    </form>
+</div>
+</body>
+<script>
+    function updateBooking(){
+        if(Validation()) {
+            var result = document.getElementById('resultSelect');
+            var rIndex = result.selectedIndex;
+            var status = document.getElementById('statusSelect');
+            var sIndex = status.selectedIndex;
+            var bid = document.getElementById('id');
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/updateBooking',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "id": parseInt(bid.value),
+                    "fname": fname.value,
+                    "lname": lname.value,
+                    "strnum": strnum.value,
+                    "str": str.value,
+                    "suburb": suburb.value,
+                    "email": email.value,
+                    "phone": phone.value,
+                    "date": date.value,
+                    "status": status.options[sIndex].value,
+                    "result": result.options[rIndex].value
+                }),
+                success: function (result) {
+                    alert("You update Booking Successfully");
+                    console.log(result);
+                }
+            });
+        }
+    }
+    function Validation(){
+        initial();
+        var flag = true;
+        var emailFlag = true;
+        var phoneFlag = true;
+        var fname = document.getElementById("fname");
+        var lname = document.getElementById("lname");
+        var strnum = document.getElementById("strnum");
+        var str = document.getElementById("str");
+        var suburb = document.getElementById("suburb");
+        var email = document.getElementById("email");
+        var phone = document.getElementById("phone");
+        if(fname.value ===''){fname.placeholder="First name is required";flag=false;}
+        if(lname.value ===''){lname.placeholder="Last name is required";flag=false;}
+        if(strnum.value ===''){strnum.placeholder="Street number is required";flag=false;}
+        if(str.value ===''){str.placeholder = "Street name is required";flag=false;}
+        if(suburb.value ===''){suburb.placeholder = "Suburb is required";flag=false;}
+        if(email.value ===''){email.placeholder="Email is required";flag = false;emailFlag=false;}
+        if(phone.value ===''){phone.placeholder="Phone is required";flag=false;phoneFlag=false;}
+        if(emailFlag) {
+            if (!isEmail(email.value)) {
+                email.value ="";
+                email.placeholder = "Email format not correct";
+                flag = false;
+            }
+        }
+        if(phoneFlag) {
+            if (!isPhone(phone.value)) {
+                phone.value = "";
+                phone.placeholder = "Phone format not correct";
+                flag = false;
+            }
+        }
+        return flag;
+    }
+    function initial(){
+        var fname = document.getElementById("fname");
+        var lname = document.getElementById("lname");
+        var strnum = document.getElementById("strnum");
+        var str = document.getElementById("str");
+        var suburb = document.getElementById("suburb");
+        var email = document.getElementById("email");
+        var phone = document.getElementById("phone");
+        var feedback = document.getElementById('feedback');
+
+        fname.placeholder = "Your First Name";
+        lname.placeholder = "Your Last Name";
+        strnum.placeholder="Street number you live";
+        str.placeholder = "Street name you live";
+        suburb.placeholder = "Suburb you live";
+        email.placeholder = "Enter your email";
+        phone.placeholder = "Enter your phone";
+        feedback.innerHTML = "";
+    }
+
+    function isEmail(email){
+        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+    }
+    function isPhone(phone){
+        return /^(([0-9\ \+\_\-\\(\)])|(ext|x)){6,20}$/.test(phone);
+    }
+</script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Booking List</title>
+    <link href="./css/bookingliststyle.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function editBooking(id){
+            var newHref = "./updateBookingByUser.html?id=" + id
+            window.location.href = newHref;
+        }
+
+        function checkUserLogin(){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'checkUserLogin',
+                contentType: "application/json",
+                success: function (result) {
+                    if (result==="") {
+                        alert("Testing booking services require Login First!");
+                        window.location.href = "userLogin.html";
+                    } else{
+                        getListbyEmail(result);
+                    }
+                }
+            });
+        }
+        function getListbyEmail(email) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/findBookingbyEmail',
+                contentType: "application/json",
+                data: email,
+                success: function (result) {
+                    // json string
+                    var objArray = eval(result);
+                    var table = document.getElementById('table_info');
+                    console.log(objArray);
+                    for (var i = 0; i < objArray.length; i++) {
+                        var row = document.createElement('tr');
+                        table.append(row);
+                        var td1 = document.createElement('td');
+                        var td2 = document.createElement('td');
+                        var td3 = document.createElement('td');
+                        var td4 = document.createElement('td');
+                        var td5 = document.createElement('td');
+                        var td6 = document.createElement('td');
+                        var td7 = document.createElement('td');
+
+                        row.append(td1);
+                        row.append(td2);
+                        row.append(td3);
+                        row.append(td4);
+                        row.append(td5);
+                        row.append(td6);
+                        row.append(td7);
+
+                        var str1 = "";
+
+                        if (objArray[i].status == "Continue") {
+                            var str1 = "<input type=\"button\"  value=\"Update\" onClick=\"editBooking('" + objArray[i].id + "')\">"
+
+                        }//end of if
+                            td1.innerHTML = objArray[i].id;
+                            td2.innerHTML = objArray[i].email;
+                            td3.innerHTML = objArray[i].strnum + " " + objArray[i].str + " " + objArray[i].suburb;
+                            td4.innerHTML = objArray[i].date;
+                            td5.innerHTML = objArray[i].result;
+                            td6.innerHTML = objArray[i].status;
+                            td7.innerHTML = str1;
+
+
+                    }// end of for
+                }// end of success function
+            }); // end of ajax
+        }
+    </script>
+<body onload="checkUserLogin()">
+    <h1 id="head">Test Booking Service</h1>
+    <ul id="navigation">
+            <li><span class="active">Overview</span></li>
+            <li><a href="index-page-3.html" target="_self">Home</a></li>
+            <li><a href="testBooking.html" target="_self">TestBooking</a></li>
+            <li><a href="testBookingList.html" target="_self">Histroy</a></li>
+        </ul>
+
+     <div class="Content-Main">
+      <h1>Test Booking Service</h1>
+    <table id="table_info">
+        <tr>
+            <th>No.</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Test Date</th>
+            <th>Result</th>
+            <th>Status</th>
+            <th>&nbsp Update &nbsp</th>
+
+        </tr>
+
+    </table>
+    </div>
+</body>
+</html>

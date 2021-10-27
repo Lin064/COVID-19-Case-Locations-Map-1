@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b1524fc800.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/accountManageStyle.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body onload="readAccount()">
+<div class="container text-center">
+    <h1 class="bg-light py-4 text-info"><i class="fas fa-plug"></i> Account Update</h1>
+</div>
+
+<div class="d-flex justify-content-center">
+    <form class="w-50">
+        <div class="row">
+            <div class="col">
+                <label for="staffid"></label>
+                <input type="text" id="staffid" class="form-control" readonly placeholder="ID" autocomplete="off">
+            </div>
+            <div class="col">
+                <label for="staffemail"></label>
+                <input type="text" id="staffemail" class="form-control" placeholder="Email" autocomplete="off">
+            </div>
+            <div class="col">
+                <label for="staffpassword"></label>
+                <input type="text" id="staffpassword" class="form-control" placeholder="Password" autocomplete="off">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-center">
+    <a class="btn btn-warning" id="btn-update" onclick="updateAccount()">Update</a>
+</div>
+</body>
+
+<script>
+    //Get the id from selected update button
+    function getPageID()
+    {
+        let url = window.location.href;
+        let sign = url.indexOf('=');
+        if (sign > -1)
+        {
+            url = url.substring(sign + 1);
+        }
+        let sharp = url.indexOf('#');
+        if(sharp > -1)
+        {
+            url = url.substring(0, sharp);
+        }
+        return url;
+    }
+
+    //Push the account into the text box
+    function readAccount() {
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            url: "/readAccounts",
+            contentType: "application/json",
+            success: function (result) {
+                var array = eval(result);
+                var table = document.getElementById('staffaccount');
+                //console.log(array);
+                var id = getPageID();
+                for(var i=0;i<array.length;i++) {
+                    if(array[i].staffId == id) {
+                        document.getElementById("staffid").value = array[i].staffId;
+                        document.getElementById("staffemail").value = array[i].staffEmail;
+                        document.getElementById("staffpassword").value = array[i].staffPassword;
+                    }
+                }
+
+            }
+        });
+    }
+
+    //Resend the data to database
+    function updateAccount() {
+        var staffid = getPageID();
+        var staffemail = document.getElementById('staffemail').value;
+        var staffpassword = document.getElementById('staffpassword').value;
+        console.log(staffemail);
+        console.log(staffpassword);
+        var obj = {
+            "staffId" : parseInt(staffid),
+            "staffEmail": staffemail,
+            "staffPassword": staffpassword
+        };
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            url: '/updates',
+            contentType: "application/json",
+            data: JSON.stringify(obj),
+            success: function(res) {
+                //console.log(res);
+                window.location.href='accountManagement.html';
+                console.log(777);
+            }, error : function() {
+                alert("Error update request");
+            },
+        });
+
+    }
+
+</script>
+</html>
